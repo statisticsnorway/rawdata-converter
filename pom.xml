@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.ssb.rawdata.converter</groupId>
     <artifactId>rawdata-converter</artifactId>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1</version>
     <packaging>pom</packaging>
 
     <name>Rawdata Converter Application Building Blocks</name>
@@ -23,7 +22,7 @@
         <connection>scm:git:git://github.com/statisticsnorway/rawdata-converter.git</connection>
         <developerConnection>scm:git:git@github.com:statisticsnorway/rawdata-converter.git</developerConnection>
         <url>https://github.com/statisticsnorway/rawdata-converter</url>
-        <tag>HEAD</tag>
+        <tag>0.9.1</tag>
     </scm>
 
     <licenses>
