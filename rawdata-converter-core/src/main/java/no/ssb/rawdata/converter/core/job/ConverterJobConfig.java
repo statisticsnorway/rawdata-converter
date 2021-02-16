@@ -133,6 +133,7 @@ public class ConverterJobConfig implements Serializable {
 
     @ConfigurationProperties("debug")
     @Data
+    @EqualsAndHashCode(callSuper=false)
     public static class Debug extends ConfigElement {
         /**
          * <p>If true, no data will be written. This can be handy during development, as it allows
@@ -274,6 +275,7 @@ public class ConverterJobConfig implements Serializable {
 
     @ConfigurationProperties("converter-settings")
     @Data
+    @EqualsAndHashCode(callSuper=false)
     public static class ConverterSettings extends ConfigElement {
         /**
          * The max number of records to convert before writing results to parquet.
@@ -311,6 +313,7 @@ public class ConverterJobConfig implements Serializable {
 
     @ConfigurationProperties("rawdata-source")
     @Data
+    @EqualsAndHashCode(callSuper=false)
     public static class RawdataSourceRef extends ConfigElement {
         /**
          * References a named entry in the rawdata.sources config section of the application config.
@@ -339,6 +342,7 @@ public class ConverterJobConfig implements Serializable {
 
     @ConfigurationProperties("target-storage")
     @Data
+    @EqualsAndHashCode(callSuper=false)
     public static class TargetStorage extends ConfigElement {
         /**
          * The root of the dataset (the part the prefixes the path)
@@ -372,6 +376,7 @@ public class ConverterJobConfig implements Serializable {
 
     @ConfigurationProperties("target-dataset")
     @Data
+    @EqualsAndHashCode(callSuper=false)
     public static class TargetDataset extends ConfigElement {
         private Valuation valuation;
         private DatasetType type;
