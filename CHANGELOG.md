@@ -1,12 +1,16 @@
 # Changelog
 
-## [0.9.1](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.1) (2021-02-16)
+## [0.9.3](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.3) (2021-02-16)
 
-[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/rawdata-converter-0.9.0...0.9.1)
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.2...0.9.3)
 
-## [rawdata-converter-0.9.0](https://github.com/statisticsnorway/rawdata-converter/tree/rawdata-converter-0.9.0) (2021-02-15)
+**Merged pull requests:**
 
-[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/4742a5d317fbbdb08f3c78d03772b44d03526f2e...rawdata-converter-0.9.0)
+- Relax converter job config logging [\#1](https://github.com/statisticsnorway/rawdata-converter/pull/1) ([kschulst](https://github.com/kschulst))
+
+## [0.9.2](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.2) (2021-02-16)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.1...0.9.2)
 
 
 

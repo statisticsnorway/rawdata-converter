@@ -13,6 +13,10 @@ release-dryrun: ## Simulate a release in order to detect any issues
 release: ## Release a new version. Update POMs and tag the new version in git. Pipeline will deploy upon tag detection.
 	mvn release:prepare release:perform -Darguments="-Dmaven.deploy.skip=true -Dmaven.javadoc.skip=true"
 
+.PHONY: changelog
+changelog: ## Update changelog
+	github_changelog_generator -u statisticsnorway -p rawdata-converter
+
 .PHONY: help
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
