@@ -373,6 +373,10 @@ public class ConverterJobConfig implements Serializable {
          * is GCS and this property is null, then it is assumed that compute engine credentials should be used.</p>
          */
         private String saKeyFile;
+
+        public String fullPath() {
+            return String.join("", root, path, "/", version) ;
+        }
     }
 
     @ConfigurationProperties("target-dataset")

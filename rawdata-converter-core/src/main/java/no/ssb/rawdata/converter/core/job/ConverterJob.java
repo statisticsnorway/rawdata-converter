@@ -22,6 +22,7 @@ import no.ssb.rawdata.converter.core.datasetmeta.DatasetType;
 import no.ssb.rawdata.converter.core.datasetmeta.PublishDatasetMetaEvent;
 import no.ssb.rawdata.converter.core.rawdatasource.RawdataConsumers;
 import no.ssb.rawdata.converter.util.DatasetUriBuilder;
+import no.ssb.rawdata.converter.util.Jq;
 import no.ssb.rawdata.converter.util.Json;
 import no.ssb.rawdata.converter.util.RawdataMessageAdapter;
 import no.ssb.rawdata.converter.util.RuntimeVariables;
@@ -267,7 +268,7 @@ public class ConverterJob {
             RawdataMessage message = rawdataConsumer.receive(TIMEOUT, TimeUnit.MILLISECONDS);
 
             if (message != null) {
-                log.info("[{}] Process RawdataMessage - {}, t={}", jobId(), posAndIdOf(message), Instant.ofEpochMilli(message.timestamp()).toString());
+                log.debug("[{}] Process RawdataMessage - {}, t={}", jobId(), posAndIdOf(message), Instant.ofEpochMilli(message.timestamp()).toString());
                 executionSummaryProperties.putIfAbsent("position.start.actual", posAndIdOf(message));
                 emitter.onNext(message);
             } else {
@@ -309,13 +310,18 @@ public class ConverterJob {
 
                 // Convert and write
                 else {
+                    log.info("[{}] Target path: {}", jobId(), jobConfig.getTargetStorage().fullPath());
                     datasetStorage.writeDataUnbounded(
                       datasetUriOf(jobConfig.getTargetStorage()), // dataset to write to
                       targetAvroSchema, // avro schema
                       convertRecords(rawdataMessages), // map rawdata to avro records
                       maxSecondsBeforeFlush, TimeUnit.SECONDS, maxRecordsBeforeFlush // windowing criteria
                     ).subscribe(
-                      onNext -> {},
+                      onNext -> {
+                          String lastUlid = Jq.queryOne(".manifest.collector.ulid", onNext.toString(), String.class).orElse(null);
+                          String lastPos = Jq.queryOne(".manifest.collector.position", onNext.toString(), String.class).orElse(null);
+                          log.info("[{}] Write converted parquet records @ pos={}, ulid={}", jobId(), lastPos, lastUlid);
+                      },
                       exception -> {
                           deactivateAndLogProcessingError("Error processing rawdata", lastRawdataMessage().orElse(null), exception);
                       },
