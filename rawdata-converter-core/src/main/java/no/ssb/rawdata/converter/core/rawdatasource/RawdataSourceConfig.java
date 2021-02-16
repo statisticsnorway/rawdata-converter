@@ -6,6 +6,7 @@ import io.micronaut.context.annotation.EachProperty;
 import io.micronaut.context.annotation.Parameter;
 import io.micronaut.core.annotation.Introspected;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Properties;
@@ -28,6 +29,7 @@ public class RawdataSourceConfig {
 
     @ConfigurationProperties("encryption")
     @Data
+    @EqualsAndHashCode(callSuper=false)
     public static class Encryption extends ConfigElement {
         private char[] key;
         private byte[] salt;

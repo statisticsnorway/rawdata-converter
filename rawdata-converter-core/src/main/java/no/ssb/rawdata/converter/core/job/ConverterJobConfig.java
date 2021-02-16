@@ -8,6 +8,7 @@ import io.micronaut.context.annotation.Parameter;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.convert.format.MapFormat;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import no.ssb.dlp.pseudo.core.PseudoFuncRule;
 import no.ssb.rawdata.converter.core.datasetmeta.DatasetType;
