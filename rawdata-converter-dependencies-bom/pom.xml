@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -13,7 +14,8 @@
     <packaging>pom</packaging>
     <name>Rawdata Converter Dependencies</name>
     <description>
-        Bill of materials to make sure a consistent set of versions is used for Rawdata Converter's transitive dependencies.
+        Bill of materials to make sure a consistent set of versions is used for Rawdata Converter's transitive
+        dependencies.
     </description>
 
     <properties>
@@ -23,6 +25,7 @@
         <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
         <lombok.version>1.18.12</lombok.version>
         <micronaut.version>2.2.3</micronaut.version>
+        <micronaut-openapi.version>2.2.2</micronaut-openapi.version>
         <protobuf-java.version>3.13.0</protobuf-java.version>
         <ssb.avro-buddy-core.version>0.0.8</ssb.avro-buddy-core.version>
         <ssb.avro-buddy-csv.version>0.0.5</ssb.avro-buddy-csv.version>
@@ -213,4 +216,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 </project>
