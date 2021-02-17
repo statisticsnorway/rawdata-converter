@@ -1,12 +1,24 @@
 # Changelog
 
+## [0.9.4](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.4) (2021-02-17)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.3...0.9.4)
+
+**Fixed bugs:**
+
+- JWT for accessing dapla services  is expired [\#2](https://github.com/statisticsnorway/rawdata-converter/issues/2)
+
+**Merged pull requests:**
+
+- Fix jwt expired bug [\#5](https://github.com/statisticsnorway/rawdata-converter/pull/5) ([kschulst](https://github.com/kschulst))
+
 ## [0.9.3](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.3) (2021-02-16)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.2...0.9.3)
 
 **Merged pull requests:**
 
-- Relax converter job config logging [\#1](https://github.com/statisticsnorway/rawdata-converter/pull/1) ([kschulst](https://github.com/kschulst))
+- Relax converter job logging [\#1](https://github.com/statisticsnorway/rawdata-converter/pull/1) ([kschulst](https://github.com/kschulst))
 
 ## [0.9.2](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.2) (2021-02-16)
 
