@@ -1,6 +1,7 @@
 package no.ssb.rawdata.converter.service.dapla.oauth;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.google.common.annotations.VisibleForTesting;
 import com.nimbusds.jwt.JWTParser;
 import io.micronaut.context.annotation.Requires;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +58,7 @@ public class KeycloakAuthTokenProvider implements AuthTokenProvider {
             // Require refetching of token if expiration time is less than 3 minutes from now
             boolean tokenExpired = JWTParser.parse(authToken).getJWTClaimsSet()
               .getExpirationTime().toInstant().minusSeconds(180)
-              .isAfter(Instant.now());
+              .isBefore(Instant.now());
 
             if (tokenExpired) {
                 log.debug("Retrieving auth token since expiration time of current token is less than 3 minutes from now");
@@ -106,6 +107,11 @@ public class KeycloakAuthTokenProvider implements AuthTokenProvider {
         }
 
         return token;
+    }
+
+    @VisibleForTesting
+    void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 
     public static class AuthTokenRetrievalException extends RuntimeException {

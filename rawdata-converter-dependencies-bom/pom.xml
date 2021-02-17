@@ -25,6 +25,7 @@
         <lombok.version>1.18.12</lombok.version>
         <micronaut.version>2.2.3</micronaut.version>
         <micronaut-openapi.version>2.2.2</micronaut-openapi.version>
+        <nimbus-jose-jwt.version>9.5</nimbus-jose-jwt.version>
         <protobuf-java.version>3.13.0</protobuf-java.version>
         <ssb.avro-buddy-core.version>0.0.8</ssb.avro-buddy-core.version>
         <ssb.avro-buddy-csv.version>0.0.5</ssb.avro-buddy-csv.version>
@@ -107,6 +108,11 @@
                 <version>${micronaut.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.protobuf</groupId>
