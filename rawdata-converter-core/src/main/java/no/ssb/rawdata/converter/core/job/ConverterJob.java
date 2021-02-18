@@ -320,7 +320,7 @@ public class ConverterJob {
                       onNext -> {
                           String lastUlid = Jq.queryOne(".manifest.collector.ulid", onNext.toString(), String.class).orElse(null);
                           String lastPos = Jq.queryOne(".manifest.collector.position", onNext.toString(), String.class).orElse(null);
-                          log.info("[{}] Write converted parquet records @ pos={}, ulid={}", jobId(), lastPos, lastUlid);
+                          log.info("[{}] Write converted records @{}/{}, pos={}, ulid={}", jobId(), jobConfig.getRawdataSource().getName(), jobConfig.getRawdataSource().getTopic(), lastPos, lastUlid);
                       },
                       exception -> {
                           deactivateAndLogProcessingError("Error processing rawdata", lastRawdataMessage().orElse(null), exception);
