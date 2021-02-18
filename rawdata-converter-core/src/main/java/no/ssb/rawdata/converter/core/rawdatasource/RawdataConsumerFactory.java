@@ -31,16 +31,34 @@ public class RawdataConsumerFactory {
         DatasetUri datasetUri = datasetUriOf(jobConfig.getTargetStorage());
         StorageType storageType = StorageType.of(datasetUri);
         DatasetStorage datasetStorage = datasetStorageFactory.datasetStorageOf(storageType, jobConfig.getTargetStorage().getSaKeyFile());
-        ULID.Value initialPosition = resolveInitialPosition(jobConfig.getRawdataSource().getInitialPosition(), datasetStorage, datasetUri);
+        String configuredInitialPosition = jobConfig.getRawdataSource().getInitialPosition();
+        ULID.Value initialPositionUlid = resolveInitialPosition(configuredInitialPosition, datasetStorage, datasetUri);
 
         RawdataClient rawdataClient = rawdataClientFactory.rawdataClientOf(jobConfig.getRawdataSource().getName());
-        RawdataConsumer mainRawdataConsumer = rawdataClient.consumer(jobConfig.getRawdataSource().getTopic(), initialPosition, true);
+        RawdataConsumer mainRawdataConsumer = rawdataClient.consumer(jobConfig.getRawdataSource().getTopic(), initialPositionUlid, includeInitialPosition(configuredInitialPosition));
         RawdataConsumer sampleRawdataConsumer = rawdataClient.consumer(jobConfig.getRawdataSource().getTopic());
 
         return RawdataConsumers.builder()
           .mainRawdataConsumer(mainRawdataConsumer)
           .sampleRawdataConsumer(sampleRawdataConsumer)
           .build();
+    }
+
+    /**
+     * </p>When consuming a rawdata stream by starting at a specific position, we can select to include the position, or start
+     * at position+1. What we do depends on where we get the position ulid from.</p>
+     *
+     * <p>If the configured initial position is set to "LAST", then we should start at position+1. When using "LAST" we
+     * read the actual position ulid from an already converted dataset. Thus, if we were to include this position, that
+     * would result in duplicates.</p>
+     *
+     * <p>On the other hand, if we have configured the converter to explicitly start at a given ulid, then we of course
+     * expect to start at this and not position+1 (which would mean that we would skip a record).</p>
+     *
+     * @return whether or not to include the initial position
+     */
+    boolean includeInitialPosition(String configuredInitialPosition) {
+        return ! "LAST".equalsIgnoreCase(configuredInitialPosition);
     }
 
     private static DatasetUri datasetUriOf(ConverterJobConfig.TargetStorage storage) {
@@ -54,7 +72,6 @@ public class RawdataConsumerFactory {
     /**
      * Attempt to resolve the position from which the rawdata stream should start.
      */
-    // TODO: Return Optional
     private ULID.Value resolveInitialPosition(String initialPosition, DatasetStorage datasetStorage, DatasetUri datasetUri) {
         final ULID.Value position;
         try {
@@ -80,7 +97,6 @@ public class RawdataConsumerFactory {
         return position;
     }
 
-    // TODO: Return Optional
     private ULID.Value attemptToFindLastRecord(DatasetStorage datasetStorage, DatasetUri datasetUri) {
         FileInfo lastModifiedDatasetFile = datasetStorage.getLastModifiedDatasetFile(datasetUri).orElse(null);
         if (lastModifiedDatasetFile == null) {
