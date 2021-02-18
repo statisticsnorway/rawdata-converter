@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.5](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.5) (2021-02-18)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.4...0.9.5)
+
+**Implemented enhancements:**
+
+- Include reference to rawadata-source and topic in logs [\#7](https://github.com/statisticsnorway/rawdata-converter/issues/7)
+
+**Fixed bugs:**
+
+- Duplicates after using intial-position=LAST [\#10](https://github.com/statisticsnorway/rawdata-converter/issues/10)
+
+**Merged pull requests:**
+
+- Don't include actual intial position if initialPosition=LAST [\#11](https://github.com/statisticsnorway/rawdata-converter/pull/11) ([kschulst](https://github.com/kschulst))
+
 ## [0.9.4](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.4) (2021-02-17)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.3...0.9.4)
