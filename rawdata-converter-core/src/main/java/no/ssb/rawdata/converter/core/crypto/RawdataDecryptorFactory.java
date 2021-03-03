@@ -28,7 +28,13 @@ public class RawdataDecryptorFactory {
             return null;
         }
         else {
-            return encryptionCredentialsService.getKey(rawdataSource.getEncryptionKeyId());
+            String version = rawdataSource.getEncryptionKeyVersion();
+            if (version == null || version.isEmpty()) {
+                return encryptionCredentialsService.getKey(rawdataSource.getEncryptionKeyId());
+            }
+            else {
+                return encryptionCredentialsService.getKey(rawdataSource.getEncryptionKeyId(), version);
+            }
         }
     }
 

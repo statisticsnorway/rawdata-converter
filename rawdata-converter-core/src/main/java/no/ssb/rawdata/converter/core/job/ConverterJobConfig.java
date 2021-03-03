@@ -346,6 +346,12 @@ public class ConverterJobConfig implements Serializable {
         private String encryptionKeyId;
 
         /**
+         * Rawdata encryption key version - optional. Can be specified if you know the specific version of the encryption
+         * key (identified by encryptionKeyId) to use. If you leave this empty, then the "latest" version will be used.
+         */
+        private String encryptionKeyVersion;
+
+        /**
          * Rawdata encryption key - can be specified if you for some reason want to avoid secret manager lookup of
          * encryptionKeyId (e.g. if the encryption key is injected into the app environment)
          */

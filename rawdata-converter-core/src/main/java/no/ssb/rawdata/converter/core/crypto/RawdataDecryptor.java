@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 @Slf4j
 public class RawdataDecryptor {
 
-    private static final String PROP_ENCRYPTION_KEY = "rawdata.encryption.key";
-    private static final String PROP_ENCRYPTION_SALT = "rawdata.encryption.salt";
+    private static final String PROP_ENCRYPTION_KEY = "<job>.rawdata-source.encryption-key-id";
+    private static final String PROP_ENCRYPTION_SALT = "<job>.rawdata-source.encryption-salt";
 
     private final EncryptionClient encryptionClient;
     private final boolean isEncryptionActive;
@@ -25,7 +25,7 @@ public class RawdataDecryptor {
 
         if (isEncryptionActive) {
             rawdataStorageSecretKey = encryptionClient.generateSecretKey(encryptionKey, encryptionSalt).getEncoded();
-            log.info("Rawdata decryptor initialized. Assuming that rawdata is encrypted. To disable, remove '" + PROP_ENCRYPTION_KEY + "' and '" + PROP_ENCRYPTION_SALT + "'");
+            log.info("Rawdata decryptor initialized. Assuming that rawdata is encrypted.");
         }
         else {
             rawdataStorageSecretKey = null;
