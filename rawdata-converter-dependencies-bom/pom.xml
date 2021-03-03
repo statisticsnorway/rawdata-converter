@@ -18,13 +18,15 @@
     </description>
 
     <properties>
+        <google-cloud-secretmanager.version>1.2.8</google-cloud-secretmanager.version>
         <grpc.version>1.32.1</grpc.version>
         <guava.version>29.0-jre</guava.version>
         <jackson-jq.version>1.0.0-preview.20191208</jackson-jq.version>
         <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
         <lombok.version>1.18.12</lombok.version>
-        <micronaut.version>2.2.3</micronaut.version>
-        <micronaut-openapi.version>2.2.2</micronaut-openapi.version>
+        <micronaut.version>2.3.2</micronaut.version>
+        <micronaut-gcp.version>3.4.0</micronaut-gcp.version> <!-- TODO: remove this when micronaut-bom is updated -->
+        <micronaut-openapi.version>2.3.1</micronaut-openapi.version>
         <nimbus-jose-jwt.version>9.5</nimbus-jose-jwt.version>
         <protobuf-java.version>3.13.0</protobuf-java.version>
         <ssb.avro-buddy-core.version>0.0.8</ssb.avro-buddy-core.version>
@@ -52,6 +54,13 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency> <!-- TODO: This should not be necessary -->
+                <groupId>com.google.cloud</groupId>
+                <artifactId>google-cloud-secretmanager</artifactId>
+                <version>${google-cloud-secretmanager.version}</version>
+                <scope>compile</scope>
+            </dependency>
+<!--
             <dependency>
                 <groupId>io.grpc</groupId>
                 <artifactId>grpc-api</artifactId>
@@ -77,6 +86,7 @@
                 <artifactId>grpc-stub</artifactId>
                 <version>${grpc.version}</version>
             </dependency>
+-->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
@@ -108,6 +118,12 @@
                 <version>${micronaut.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency> <!-- TODO: Remove this when micronaut-bom is updated -->
+                <groupId>io.micronaut.gcp</groupId>
+                <artifactId>micronaut-gcp-secret-manager</artifactId>
+                <version>${micronaut-gcp.version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>

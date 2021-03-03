@@ -61,7 +61,22 @@
         </dependency>
         <dependency>
             <groupId>io.micronaut</groupId>
+            <artifactId>micronaut-discovery-client</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut</groupId>
             <artifactId>micronaut-management</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.gcp</groupId>
+            <artifactId>micronaut-gcp-secret-manager</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency> <!-- TODO: This should not be necessary -->
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-secretmanager</artifactId>
             <scope>compile</scope>
         </dependency>
         <dependency>

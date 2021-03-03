@@ -48,6 +48,16 @@
             <groupId>io.micronaut.micrometer</groupId>
             <artifactId>micronaut-micrometer-registry-prometheus</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.micronaut.gcp</groupId>
+            <artifactId>micronaut-gcp-common</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.micronaut.gcp</groupId>
+            <artifactId>micronaut-gcp-secret-manager</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- Misc -->
         <dependency>
