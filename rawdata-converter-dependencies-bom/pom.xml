@@ -19,7 +19,6 @@
 
     <properties>
         <google-cloud-secretmanager.version>1.2.8</google-cloud-secretmanager.version>
-        <grpc.version>1.32.1</grpc.version>
         <guava.version>29.0-jre</guava.version>
         <jackson-jq.version>1.0.0-preview.20191208</jackson-jq.version>
         <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
@@ -60,33 +59,6 @@
                 <version>${google-cloud-secretmanager.version}</version>
                 <scope>compile</scope>
             </dependency>
-<!--
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-api</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-core</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-netty</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-protobuf</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.grpc</groupId>
-                <artifactId>grpc-stub</artifactId>
-                <version>${grpc.version}</version>
-            </dependency>
--->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
