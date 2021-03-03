@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.10.0](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.0) (2021-03-03)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.5...0.10.0)
+
+**Implemented enhancements:**
+
+- Use GCP Secret Manager for secrets [\#3](https://github.com/statisticsnorway/rawdata-converter/issues/3)
+
+**Merged pull requests:**
+
+- Use GCP Secret Manager for secrets [\#12](https://github.com/statisticsnorway/rawdata-converter/pull/12) ([kschulst](https://github.com/kschulst))
+
 ## [0.9.5](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.5) (2021-02-18)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.4...0.9.5)
@@ -14,7 +26,7 @@
 
 **Merged pull requests:**
 
-- Don't include actual intial position if initialPosition=LAST [\#11](https://github.com/statisticsnorway/rawdata-converter/pull/11) ([kschulst](https://github.com/kschulst))
+- Don't include actual initial position if initialPosition=LAST [\#11](https://github.com/statisticsnorway/rawdata-converter/pull/11) ([kschulst](https://github.com/kschulst))
 
 ## [0.9.4](https://github.com/statisticsnorway/rawdata-converter/tree/0.9.4) (2021-02-17)
 
