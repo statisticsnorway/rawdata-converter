@@ -30,14 +30,16 @@ public class KeycloakAuthTokenProvider implements AuthTokenProvider {
 
     private final HttpClient httpClient;
     private final OauthServiceConfig config;
+    private final KeycloakCredentials credentials;
 
     private String authToken;
 
-    public KeycloakAuthTokenProvider(OauthServiceConfig config) {
+    public KeycloakAuthTokenProvider(OauthServiceConfig config, KeycloakCredentials credentials) {
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.of(10, SECONDS))
                 .build();
         this.config = config;
+        this.credentials = credentials;
     }
 
     @Override
@@ -80,7 +82,7 @@ public class KeycloakAuthTokenProvider implements AuthTokenProvider {
                 .POST(BodyPublishers.ofString("grant_type=client_credentials"))
                 .timeout(Duration.of(10, SECONDS))
                 .header("Content-Type", MediaType.APPLICATION_FORM_URLENCODED)
-                .header("Authorization", String.format("Basic %s", config.getBase64Credentials()))
+                .header("Authorization", String.format("Basic %s", credentials.asBase64Encoded()))
                 .build();
 
         HttpResponse<String> response;

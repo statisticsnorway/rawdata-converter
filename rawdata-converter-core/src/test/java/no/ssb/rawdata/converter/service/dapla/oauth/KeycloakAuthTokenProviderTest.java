@@ -21,7 +21,7 @@ class KeycloakAuthTokenProviderTest {
 
     @BeforeEach
     void init() {
-        tokenProvider = Mockito.spy(new KeycloakAuthTokenProvider(null));
+        tokenProvider = Mockito.spy(new KeycloakAuthTokenProvider(null, null));
     }
 
     @Test
