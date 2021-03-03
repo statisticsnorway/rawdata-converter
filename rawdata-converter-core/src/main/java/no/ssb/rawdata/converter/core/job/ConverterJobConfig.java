@@ -339,6 +339,22 @@ public class ConverterJobConfig implements Serializable {
          * </ul></p>
          */
         private String initialPosition;
+
+        /**
+         * Name of the secret that holds the rawdata encryption key
+         */
+        private String encryptionKeyId;
+
+        /**
+         * Rawdata encryption key - can be specified if you for some reason want to avoid secret manager lookup of
+         * encryptionKeyId (e.g. if the encryption key is injected into the app environment)
+         */
+        private char[] encryptionKey;
+
+        /**
+         * Rawdata encryption salt. Required if you specify an encryptionKeyId or encryptionKey
+         */
+        private byte[] encryptionSalt;
     }
 
     @ConfigurationProperties("target-storage")

@@ -21,7 +21,7 @@ public class DecryptedRawdataMessage implements RawdataMessage {
             decryptData(secretKey);
         } catch (Exception e) {
             throw new DecryptRawdataMessageException(
-                    String.format("Failed to decrypt message with ulid=%s. If this is due to the message not being encrypted, disable decryption to fix", rawdataMessage.ulid().toString()), e
+              String.format("Failed to decrypt message with ulid=%s. If this is due to the message not being encrypted, disable decryption to fix", rawdataMessage.ulid().toString()), e
             );
         }
     }
