@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * Utility for publishing RawdataMessages to a rawdata store. You can use RawdataMessageFixtures to load rawdata
  * messages from file.
- *
+ * <p>
  * This can be handy if you want to test a RawdataConverter or ConverterJobExecutor against "hand-made" rawdata messages.
  */
 public class RawdataPublisher {
@@ -28,7 +28,7 @@ public class RawdataPublisher {
     /**
      * Publish a collection of RawdataMessages
      *
-     * @param config rawdata client configuration
+     * @param config          rawdata client configuration
      * @param rawdataMessages rawdata messages, typically loaded using the RawdataMessageFixtures constructs
      */
     public static void publishRawdataMessages(RawdataMessages rawdataMessages, Config config) {
@@ -38,33 +38,30 @@ public class RawdataPublisher {
     /**
      * Publish a collection of RawdataMessages
      *
-     * @param config rawdata client configuration
+     * @param config          rawdata client configuration
      * @param rawdataMessages rawdata messages, typically loaded using the RawdataMessageFixtures constructs
      */
     public void publish(RawdataMessages rawdataMessages, Config config) {
         RawdataClient client = createRawdataClient(config);
         RawdataProducer producer = client.producer(config.getTopic());
-        List<String> positions = new ArrayList<>();
+        List<RawdataMessage> messages = new ArrayList<>();
 
         rawdataMessages.index().forEach((position, msg) -> {
-            positions.add(position);
             try {
-                RawdataMessage.Builder msgBuilder = producer.builder().position(position);
-                msg.keys().forEach(contentKey -> msgBuilder.put(contentKey, msg.get(contentKey)));
-                producer.buffer(msgBuilder);
-            }
-            catch (Exception e) {
+                messages.add(msg.copy().build());
+            } catch (Exception e) {
                 throw new RuntimeException("Error buffering rawdata position " + position);
             }
         });
 
         onBeforePublish(config);
-        producer.publish(positions);
+        producer.publish(messages);
         onAfterPublish(config);
     }
 
     /**
      * Invoked BEFORE publish
+     *
      * @param config
      */
     void onBeforePublish(Config config) {
@@ -79,8 +76,7 @@ public class RawdataPublisher {
         if (config.isFilesystemProvider()) {
             try {
                 Thread.sleep(2000); // Wait to allow for filesystem rawdata client provider to finish
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
 
@@ -103,16 +99,15 @@ public class RawdataPublisher {
      * @param pathToDelete path to directory or file to be deleted
      */
     private void deletePath(String pathToDelete) {
-        Path path  = Path.of(pathToDelete);
+        Path path = Path.of(pathToDelete);
         if (Files.exists(path)) {
             System.out.println("Delete folder " + path.toAbsolutePath());
             try {
                 Files.walk(path)
-                  .sorted(Comparator.reverseOrder())
-                  .map(Path::toFile)
-                  .forEach(File::delete);
-            }
-            catch (IOException e) {
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            } catch (IOException e) {
                 throw new RuntimeException("Error deleting " + path, e);
             }
         }
@@ -120,7 +115,7 @@ public class RawdataPublisher {
 
     /**
      * Use this as baseline to publish rawdata messages to a local postgres db.
-     *
+     * <p>
      * You can spin up a postgres db by going to rawdata-converter-project/localenv
      * and running `make start-db`
      *
@@ -129,17 +124,17 @@ public class RawdataPublisher {
      */
     public static Config postgresConfig(String topic) {
         Config config = Config.of(
-          Map.of(
-            "rawdata.client.provider", "postgres",
-            "rawdata.client.topic", topic,
-            "rawdata.postgres.consumer.prefetch-size", "100",
-            "rawdata.postgres.consumer.prefetch-poll-interval-when-empty", "100",
-            "postgres.driver.host", "localhost",
-            "postgres.driver.port", "15432",
-            "postgres.driver.user", "rdc",
-            "postgres.driver.password", "rdc",
-            "postgres.driver.database", "rdc"
-          )
+                Map.of(
+                        "rawdata.client.provider", "postgres",
+                        "rawdata.client.topic", topic,
+                        "rawdata.postgres.consumer.prefetch-size", "100",
+                        "rawdata.postgres.consumer.prefetch-poll-interval-when-empty", "100",
+                        "postgres.driver.host", "localhost",
+                        "postgres.driver.port", "15432",
+                        "postgres.driver.user", "rdc",
+                        "postgres.driver.password", "rdc",
+                        "postgres.driver.database", "rdc"
+                )
         );
         return config;
     }
@@ -147,22 +142,22 @@ public class RawdataPublisher {
     /**
      * Use this as baseline to publish rawdata messages to local avro file(s).
      *
-     * @param topic the topic name to publish to
+     * @param topic         the topic name to publish to
      * @param storageFolder relative path to where the resulting avro file will be stored, e.g. ./rawdatastore
      * @return
      */
     public static Config filesystemConfig(String topic, String storageFolder) {
         Config config = Config.of(
-          Map.of(
-            "rawdata.client.provider", "filesystem",
-            "rawdata.client.topic", topic,
-            "filesystem.storage-folder", storageFolder,
-            "local-temp-folder", "temp",
-            "listing.min-interval-seconds", "0",
-            "avro-file.max.seconds", "0", // Time to wait before flushing temp files to storage
-            "avro-file.max.bytes", "10485760",
-            "avro-file.sync.interval", "16"
-          )
+                Map.of(
+                        "rawdata.client.provider", "filesystem",
+                        "rawdata.client.topic", topic,
+                        "filesystem.storage-folder", storageFolder,
+                        "local-temp-folder", "temp",
+                        "listing.min-interval-seconds", "0",
+                        "avro-file.max.seconds", "0", // Time to wait before flushing temp files to storage
+                        "avro-file.max.bytes", "10485760",
+                        "avro-file.sync.interval", "16"
+                )
         );
         return config;
     }
@@ -193,27 +188,35 @@ public class RawdataPublisher {
             return "filesystem".equals(get("rawdata.client.provider"));
         }
 
-        /** Set whether or not to perform cleanup before publishing (e.g. delete any previously generated targets) */
+        /**
+         * Set whether or not to perform cleanup before publishing (e.g. delete any previously generated targets)
+         */
         public Config cleanupBefore(boolean cleanup) {
             this.cleanupBefore = cleanup;
             return this;
         }
 
-        /** Set whether or not to perform cleanup afterwards */
+        /**
+         * Set whether or not to perform cleanup afterwards
+         */
         public Config cleanupAfter(boolean cleanup) {
             this.cleanupAfter = cleanup;
             return this;
         }
 
-        /** whether or not to perform cleanup before publishing - defaults to false */
+        /**
+         * whether or not to perform cleanup before publishing - defaults to false
+         */
         public boolean cleanupBefore() {
             return cleanupBefore;
         }
 
-        /** whether or not to perform cleanup afterwards - defaults to false */
+        /**
+         * whether or not to perform cleanup afterwards - defaults to false
+         */
         public boolean cleanupAfter() {
             return cleanupBefore;
         }
-     }
+    }
 
 }

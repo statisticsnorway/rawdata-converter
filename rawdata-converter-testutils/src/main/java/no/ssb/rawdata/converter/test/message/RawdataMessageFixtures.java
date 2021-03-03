@@ -28,8 +28,7 @@ public class RawdataMessageFixtures {
             for (String group : groups) {
                 fixtures.rawdataMessagesByGroup.put(group, loadRawdataMessages(rootPath, group));
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return fixtures;
@@ -45,12 +44,18 @@ public class RawdataMessageFixtures {
 
             try {
                 Map<String, byte[]> data = Files.list(path)
-                  .collect(Collectors.toMap(
-                    p -> p.getFileName().toString(),
-                    p -> readAllBytes(p)
-                  ));
+                        .collect(Collectors.toMap(
+                                p -> p.getFileName().toString(),
+                                p -> readAllBytes(p)
+                        ));
 
-                messagesMap.put(position, new MemoryRawdataMessage(ulid.nextValue(), group, sequenceNo.incrementAndGet(), position, data));
+                messagesMap.put(position, RawdataMessage.builder()
+                        .ulid(ulid.nextValue())
+                        .orderingGroup(group)
+                        .sequenceNumber(sequenceNo.incrementAndGet())
+                        .position(position)
+                        .data(data)
+                        .build());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -62,15 +67,14 @@ public class RawdataMessageFixtures {
     static byte[] readAllBytes(Path p) {
         try {
             return Files.readAllBytes(p);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public RawdataMessages rawdataMessages(String group) {
         return Optional.ofNullable(rawdataMessagesByGroup.get(group))
-          .orElseThrow(() -> new IllegalArgumentException("Unknown rawdata message group: " + group));
+                .orElseThrow(() -> new IllegalArgumentException("Unknown rawdata message group: " + group));
     }
 
 }
