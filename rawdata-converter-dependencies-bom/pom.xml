@@ -18,12 +18,12 @@
     </description>
 
     <properties>
-        <google-cloud-secretmanager.version>1.2.8</google-cloud-secretmanager.version>
+        <google-cloud-secretmanager.version>1.2.8</google-cloud-secretmanager.version> <!-- TODO: Should be retrieved transitively via micronaut-gcp-secret-manager -->
         <guava.version>29.0-jre</guava.version>
         <jackson-jq.version>1.0.0-preview.20191208</jackson-jq.version>
         <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
         <lombok.version>1.18.12</lombok.version>
-        <micronaut.version>2.3.2</micronaut.version>
+        <micronaut.version>2.3.4</micronaut.version>
         <micronaut-gcp.version>3.4.0</micronaut-gcp.version> <!-- TODO: remove this when micronaut-bom is updated -->
         <micronaut-openapi.version>2.3.1</micronaut-openapi.version>
         <nimbus-jose-jwt.version>9.5</nimbus-jose-jwt.version>
@@ -53,11 +53,10 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency> <!-- TODO: This should not be necessary -->
+            <dependency> <!-- TODO: This should not be necessary, should be retrieved transitively via micronaut-gcp-secret-manager -->
                 <groupId>com.google.cloud</groupId>
                 <artifactId>google-cloud-secretmanager</artifactId>
                 <version>${google-cloud-secretmanager.version}</version>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -95,7 +94,6 @@
                 <groupId>io.micronaut.gcp</groupId>
                 <artifactId>micronaut-gcp-secret-manager</artifactId>
                 <version>${micronaut-gcp.version}</version>
-                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>com.nimbusds</groupId>
