@@ -49,7 +49,7 @@ class GcpSecretServiceTest {
 
     @Test
     void givenSecretDoesNotExist_whenGetSecret_thenShouldThrowException() {
-        assertThatExceptionOfType(LocalSecretService.SecretNotFoundException.class)
+        assertThatExceptionOfType(GcpSecretService.SecretServiceException.class)
           .isThrownBy(() -> secretService.getSecret("secret-that-does-not-exist"));
     }
 
