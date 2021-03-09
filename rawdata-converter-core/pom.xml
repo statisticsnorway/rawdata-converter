@@ -58,6 +58,11 @@
             <artifactId>micronaut-gcp-secret-manager</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency> <!-- TODO: This should not be necessary - remove when micronaut-gcp fixes issues with their pom, ref: https://github.com/micronaut-projects/micronaut-core/issues/5035 -->
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-secretmanager</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- Misc -->
         <dependency>
