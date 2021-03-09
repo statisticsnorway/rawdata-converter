@@ -4,8 +4,6 @@ package no.ssb.rawdata.converter.service.dapla.dataaccess;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-
 @Data
 @ConfigurationProperties(DataAccessServiceConfig.PREFIX)
 public class DataAccessServiceConfig {

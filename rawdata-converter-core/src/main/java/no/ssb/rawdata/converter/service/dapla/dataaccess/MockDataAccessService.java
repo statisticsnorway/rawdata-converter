@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 @Slf4j
 @Singleton
-@Requires(property = DataAccessServiceConfig.PREFIX + ".impl", value = "MOCK")
+@Requires(property = DataAccessServiceConfig.PREFIX + ".impl", value="MOCK", defaultValue="MOCK")
 public class MockDataAccessService implements DataAccessService {
 
     @Override
