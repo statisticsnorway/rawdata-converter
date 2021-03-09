@@ -10,6 +10,7 @@
     </appender>
 
     <logger name="io.micronaut.http.client" level="TRACE"/>
+    <!--logger name="io.micronaut.context.condition" level="DEBUG"/-->
 
     <root level="info">
         <appender-ref ref="STDOUT" />
