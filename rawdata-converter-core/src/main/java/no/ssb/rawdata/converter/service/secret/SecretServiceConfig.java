@@ -17,8 +17,15 @@ public class SecretServiceConfig {
         GCP, LOCAL, MOCK;
     }
 
+    /**
+     * The SecretService implementation to use. Defaults to MOCK if not specified.
+     */
     private Impl impl = Impl.MOCK;
 
+    /**
+     * A map of hardcoded secrets that will override any secret IDs. This can be handy in testing situations. Secrets
+     * that are defined in this map will not be looked up in SecretManager (if impl=GCP).
+     */
     Map<String, byte[]> overrides = new LinkedHashMap<>();
 
 }
