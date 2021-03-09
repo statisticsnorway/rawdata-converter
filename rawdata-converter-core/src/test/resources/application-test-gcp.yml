@@ -1,0 +1,4 @@
+services:
+  secrets:
+    overrides:
+      some-overridden-secret-id: blah

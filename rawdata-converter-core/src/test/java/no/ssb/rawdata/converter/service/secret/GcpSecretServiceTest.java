@@ -15,7 +15,7 @@ import java.nio.charset.StandardCharsets;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-@MicronautTest
+@MicronautTest(environments = "test-gcp")
 @Property(name = "services.secrets.impl", value = "GCP")
 class GcpSecretServiceTest {
 
@@ -42,7 +42,17 @@ class GcpSecretServiceTest {
     @Test
     void givenOverriddenSecretExists_whenGetSecret_thenShouldReturnOverriddenSecretValue() {
         byte[] secretValue = "kensentme".getBytes(StandardCharsets.UTF_8);
-        config.getOverrides().put("some-overridden-secret-id", secretValue);
+        config.getOverrides().put("another-overridden-secret-id", secretValue);
+        byte[] secret = secretService.getSecret("another-overridden-secret-id");
+        assertThat(secret).isEqualTo(secretValue);
+    }
+
+    /**
+     * secret defined in src/main/test/application-test-gcp.yml
+     */
+    @Test
+    void givenOverriddenSecretInApplicationConfig_whenGetSecret_thenShouldReturnOverriddenSecretValue() {
+        byte[] secretValue = "blah".getBytes(StandardCharsets.UTF_8);
         byte[] secret = secretService.getSecret("some-overridden-secret-id");
         assertThat(secret).isEqualTo(secretValue);
     }
