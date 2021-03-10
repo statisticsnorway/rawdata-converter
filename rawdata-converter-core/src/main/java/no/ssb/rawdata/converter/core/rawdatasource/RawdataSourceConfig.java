@@ -1,12 +1,9 @@
 package no.ssb.rawdata.converter.core.rawdatasource;
 
-import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Context;
 import io.micronaut.context.annotation.EachProperty;
 import io.micronaut.context.annotation.Parameter;
-import io.micronaut.core.annotation.Introspected;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.util.Properties;
@@ -21,18 +18,6 @@ public class RawdataSourceConfig {
     }
 
     private String name;
-    private Encryption encryption = new Encryption();
     private Properties rawdataClient = new Properties();
-
-    @Introspected
-    private static abstract class ConfigElement { }
-
-    @ConfigurationProperties("encryption")
-    @Data
-    @EqualsAndHashCode(callSuper=false)
-    public static class Encryption extends ConfigElement {
-        private char[] key;
-        private byte[] salt;
-    }
 
 }

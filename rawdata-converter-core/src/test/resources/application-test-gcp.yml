@@ -1,0 +1,5 @@
+services:
+  secrets:
+    impl: GCP
+    overrides:
+      some-overridden-secret-id: blah

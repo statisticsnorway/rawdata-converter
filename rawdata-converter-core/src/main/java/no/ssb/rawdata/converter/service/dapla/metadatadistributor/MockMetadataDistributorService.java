@@ -7,7 +7,7 @@ import javax.inject.Singleton;
 
 @Slf4j
 @Singleton
-@Requires(property = MetadataDistributorServiceConfig.PREFIX + ".impl", value = "MOCK")
+@Requires(property = MetadataDistributorServiceConfig.PREFIX + ".impl", value = "MOCK", defaultValue="MOCK")
 public class MockMetadataDistributorService implements MetadataDistributorService{
 
     @Override
