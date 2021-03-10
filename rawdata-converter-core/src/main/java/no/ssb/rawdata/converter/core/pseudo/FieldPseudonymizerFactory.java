@@ -1,58 +1,56 @@
 package no.ssb.rawdata.converter.core.pseudo;
 
+import com.google.common.annotations.VisibleForTesting;
 import io.micronaut.context.annotation.Property;
+import lombok.extern.slf4j.Slf4j;
 import no.ssb.dlp.pseudo.core.FieldPseudonymizer;
 import no.ssb.dlp.pseudo.core.PseudoSecret;
 import no.ssb.rawdata.converter.core.job.ConverterJobConfig;
+import no.ssb.rawdata.converter.service.secret.SecretService;
 
 import javax.inject.Singleton;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p>Factory that constructs FieldPseudonymizers that performs (de/)pseudonymization using
  * pseudo secrets.</p>
- *
- * <p>Pseudo secrets are combined from multiple configuration sources:
- * <ul>
- *     <li>either in `application.yml` or as environment variables on the format: `PSEUDO_SECRETS_[NAME]_CONTENT`</li>
- *     <li>as GCP Secret Manager keys, named on the format `PSEUDO_SECRETS_[NAME]_CONTENT`.</li>
- * </ul>
- * In case of key name collisions, then config defined in `pseudo.secrets` will take precedence.
- * </p>
- *
- * <p>Pseudo secrets managed by GCP Secret Manager must be defined in `bootstrap.yml` in order to be preloaded upon
- * application startup</p>
- *
- * <p>Note that the "magic" behind how PseudoSecrets are constructed from property values can be seen here
- * {@link no.ssb.dlp.pseudo.core.typeconverter.PseudoSecretTypeConverter}.</p>
  */
 @Singleton
+@Slf4j
 public class FieldPseudonymizerFactory {
 
+    private final static String DEFAULT_PSEUDO_SECRET_TYPE = "AES256";
+    private final SecretService secretService;
     private final Set<PseudoSecret> pseudoSecrets;
 
     /**
      * Initialize the FieldPseudonymizerFactory
      *
      * @param configuredPseudoSecrets pseudo secrets coming from the config or environment
-     * @param secretManagerPseudoSecrets pseudo secrets managed by Secret Manager
      */
-    public FieldPseudonymizerFactory(@Property(name="pseudo.secrets") Map<String, PseudoSecret> configuredPseudoSecrets,
-                                     @Property(name="sm.pseudo.secret") Map<String, PseudoSecret> secretManagerPseudoSecrets) {
-
-        Map<String, PseudoSecret> combinedPseudoSecretsMap = Stream.concat(secretManagerPseudoSecrets.entrySet().stream(), configuredPseudoSecrets.entrySet().stream())
-          .collect(Collectors.toMap(
-            Map.Entry::getKey,
-            Map.Entry::getValue,
-            (v1, v2) -> v2)); // merge function (keep the first)
-
-        pseudoSecrets = combinedPseudoSecretsMap.entrySet().stream()
+    public FieldPseudonymizerFactory(SecretService secretService, @Property(name="pseudo.secrets") Map<String, PseudoSecret> configuredPseudoSecrets) {
+        this.secretService = secretService;
+        this.pseudoSecrets = configuredPseudoSecrets.entrySet().stream()
           .map(e -> {
               PseudoSecret secret = e.getValue();
-              secret.setId(e.getKey());
+
+              // Resolve secret content if and only if ID is specified AND content is not specified
+              if (secret.getId() != null && secret.getContent() == null) {
+                  secret.setContent(secretService.getCacheableSecret(secret.getId()));
+              }
+
+              if (secret.getContent() == null) {
+                  log.warn("Invalid pseudo secret '{}': Unable to resolve content", e.getKey());
+              }
+
+              secret.setId(e.getKey()); // Pseudo secrets use the mapping name as id
+
+              if (secret.getType() == null) {
+                  secret.setType(DEFAULT_PSEUDO_SECRET_TYPE);
+              }
+
               return secret;
           })
           .collect(Collectors.toSet());
@@ -63,6 +61,11 @@ public class FieldPseudonymizerFactory {
           .rules(jobConfig.getPseudoRules())
           .secrets(pseudoSecrets)
           .build();
+    }
+
+    @VisibleForTesting
+    Set<PseudoSecret> getPseudoSecrets() {
+        return pseudoSecrets;
     }
 
 }

@@ -34,7 +34,7 @@
         <ssb.avro-buddy-xml.version>0.0.5</ssb.avro-buddy-xml.version>
         <ssb.dapla-data-access-protobuf.version>0.9</ssb.dapla-data-access-protobuf.version>
         <ssb.dapla-dataset-api.version>0.2</ssb.dapla-dataset-api.version>
-        <ssb.dapla-dlp-pseudo-core.version>0.1.1</ssb.dapla-dlp-pseudo-core.version>
+        <ssb.dapla-dlp-pseudo-core.version>0.1.2-SNAPSHOT</ssb.dapla-dlp-pseudo-core.version>
         <ssb.dapla-metadata-distributor-protobuf.version>0.2</ssb.dapla-metadata-distributor-protobuf.version>
         <ssb.dapla-readiness.version>1.0.0</ssb.dapla-readiness.version>
         <ssb.dapla-storage-client.version>4.2.0</ssb.dapla-storage-client.version>
