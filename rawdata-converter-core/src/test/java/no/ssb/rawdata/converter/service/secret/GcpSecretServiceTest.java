@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @MicronautTest(environments = "test-gcp")
 @Property(name = "services.secrets.impl", value = "GCP")
+@Property(name = "gcp.project-id", value = "dev-sirius")
 class GcpSecretServiceTest {
 
     @Inject SecretServiceConfig config;
