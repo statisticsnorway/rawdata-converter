@@ -5,17 +5,18 @@ pseudo.secrets:
   testsecret2:
     id: pseudo-secret-testsecret2
     content: dGhlX3NlY3JldF9wYXNzd29yZF9pc19rZW5zZW50bWU=
-    type: AES256
-  pseudo-secret-testsecret3:
+  testsecret3:
     id: pseudo-secret-testsecret3
     type: AES256
+  pseudo-secret-testsecret4:
+    id: pseudo-secret-testsecret4
+    version: 2
 
 services:
   secrets:
     impl: LOCAL
     overrides:
-      pseudo-secret-testsecret1: supersecret1lAwuVx6NuAsMWLusOSA/ldia40ZugDI=
-      pseudo-secret-testsecret2: supersecret2lAwuVx6NuAsMWLusOSA/ldia40ZugDI=
       pseudo-secret-testsecret3: supersecret3lAwuVx6NuAsMWLusOSA/ldia40ZugDI=
+      pseudo-secret-testsecret4: supersecret4lAwuVx6NuAsMWLusOSA/ldia40ZugDI=
 
 
