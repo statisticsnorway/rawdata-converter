@@ -5,6 +5,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.nimbusds.jwt.JWTParser;
 import io.micronaut.context.annotation.Requires;
 import lombok.extern.slf4j.Slf4j;
+import no.ssb.rawdata.converter.service.secret.SecretService;
 import no.ssb.rawdata.converter.util.Json;
 
 import javax.inject.Singleton;
@@ -30,16 +31,19 @@ public class KeycloakAuthTokenProvider implements AuthTokenProvider {
 
     private final HttpClient httpClient;
     private final OauthServiceConfig config;
-    private final KeycloakCredentials credentials;
-
+    private final ClientCredentials credentials;
     private String authToken;
 
-    public KeycloakAuthTokenProvider(OauthServiceConfig config, KeycloakCredentials credentials) {
+    public KeycloakAuthTokenProvider(OauthServiceConfig config, SecretService secretService) {
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(Duration.of(10, SECONDS))
                 .build();
         this.config = config;
-        this.credentials = credentials;
+
+        this.credentials = new ClientCredentials(
+          secretService.getCacheableSecret(config.getClientIdKey()),
+          secretService.getCacheableSecret(config.getClientSecretKey())
+        );
     }
 
     @Override

@@ -18,6 +18,10 @@ public class OauthServiceConfig {
 
     private String tokenEndpointPath;
 
+    private String clientIdKey = "keycloak_rawdata_converter_clientid";
+
+    private String clientSecretKey = "keycloak_rawdata_converter_clientsecret";
+
     // TODO: Make this joining more robust
     public URI getTokenUrl() {
         return URI.create(host + tokenEndpointPath);

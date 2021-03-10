@@ -1,5 +1,7 @@
 package no.ssb.rawdata.converter.service.dapla.oauth;
 
+import no.ssb.rawdata.converter.service.secret.MockSecretService;
+import no.ssb.rawdata.converter.service.secret.SecretService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,12 +18,13 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class KeycloakAuthTokenProviderTest {
 
+    private final SecretService secretService = new MockSecretService();
     static final JWTMother jwtMother = new JWTMother();
     private KeycloakAuthTokenProvider tokenProvider;
 
     @BeforeEach
     void init() {
-        tokenProvider = Mockito.spy(new KeycloakAuthTokenProvider(null, null));
+        tokenProvider = Mockito.spy(new KeycloakAuthTokenProvider(new OauthServiceConfig(), secretService));
     }
 
     @Test
