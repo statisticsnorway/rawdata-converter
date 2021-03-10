@@ -1,0 +1,22 @@
+pseudo.secrets:
+  testsecret1:
+    content: dGhlX3NlY3JldF9wYXNzd29yZF9pc19rZW5zZW50bWU=
+    type: AES256
+  testsecret2:
+    id: pseudo-secret-testsecret2
+    content: dGhlX3NlY3JldF9wYXNzd29yZF9pc19rZW5zZW50bWU=
+  testsecret3:
+    id: pseudo-secret-testsecret3
+    type: AES256
+  pseudo-secret-testsecret4:
+    id: pseudo-secret-testsecret4
+    version: 2
+
+services:
+  secrets:
+    impl: LOCAL
+    overrides:
+      pseudo-secret-testsecret3: supersecret3lAwuVx6NuAsMWLusOSA/ldia40ZugDI=
+      pseudo-secret-testsecret4: supersecret4lAwuVx6NuAsMWLusOSA/ldia40ZugDI=
+
+

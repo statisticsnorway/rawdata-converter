@@ -1,5 +1,7 @@
 package no.ssb.rawdata.converter.service.secret;
 
+import io.micronaut.cache.annotation.CacheConfig;
+import io.micronaut.cache.annotation.Cacheable;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.gcp.condition.RequiresGoogleProjectId;
 import io.micronaut.gcp.secretmanager.client.SecretManagerClient;
@@ -14,6 +16,7 @@ import javax.inject.Singleton;
 @Singleton
 @Requires(property = SecretServiceConfig.PREFIX + ".impl", value = "GCP")
 @RequiresGoogleProjectId
+@CacheConfig(cacheNames = {"secrets"})
 public class GcpSecretService implements SecretService {
 
     private final static String LATEST_VERSION = "latest";
@@ -28,8 +31,8 @@ public class GcpSecretService implements SecretService {
         return getCacheableSecret(secretId, LATEST_VERSION);
     }
 
+    @Cacheable
     public byte[] getCacheableSecret(String secretId, String version) {
-        // TODO: Implement caching
         return getSecret(secretId, version);
     }
 

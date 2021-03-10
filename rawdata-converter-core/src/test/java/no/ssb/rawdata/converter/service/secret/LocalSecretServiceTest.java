@@ -20,6 +20,11 @@ class LocalSecretServiceTest {
 
     @Inject SecretService secretService;
 
+    @MockBean(RawdataConverterFactory.class)
+    RawdataConverterFactory rawdataConverterFactory() {
+        return jobConfig -> null;
+    }
+
     @Test
     void givenConfiguredImplPropertyIsLocal_whenSecretServiceIsInjected_thenShouldBeInstanceOfLocalSecretService() {
         assertThat(secretService instanceof LocalSecretService).isTrue();
@@ -37,11 +42,6 @@ class LocalSecretServiceTest {
     void givenSecretDoesNotExist_whenGetSecret_thenShouldThrowException() {
         assertThatExceptionOfType(LocalSecretService.SecretNotFoundException.class)
           .isThrownBy(() -> secretService.getSecret("secret-that-does-not-exist"));
-    }
-
-    @MockBean(RawdataConverterFactory.class)
-    RawdataConverterFactory rawdataConverterFactory() {
-        return jobConfig -> null;
     }
 
 }
