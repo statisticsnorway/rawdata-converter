@@ -1,5 +1,6 @@
 package no.ssb.rawdata.converter.service.secret;
 
+import io.micronaut.context.annotation.Property;
 import io.micronaut.gcp.secretmanager.client.SecretManagerClient;
 import io.micronaut.test.annotation.MockBean;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 @MicronautTest(environments = "test-gcp")
+@Property(name = "services.secrets.impl", value = "GCP")
 class GcpSecretServiceTest {
 
     @Inject SecretServiceConfig config;
