@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import no.ssb.rawdata.converter.core.exception.RawdataConverterException;
 
 import javax.inject.Singleton;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Singleton
@@ -52,6 +53,7 @@ public class GcpSecretService implements SecretService {
 
         // ...else get it from GCP
         final VersionedSecret secret;
+        version = Optional.ofNullable(version).orElse(LATEST_VERSION);
         try {
             secret = secretManager.getSecret(secretId, version).blockingGet();
         }
