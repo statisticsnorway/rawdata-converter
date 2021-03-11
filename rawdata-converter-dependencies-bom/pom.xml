@@ -23,7 +23,7 @@
         <jackson-jq.version>1.0.0-preview.20191208</jackson-jq.version>
         <logstash-logback-encoder.version>6.4</logstash-logback-encoder.version>
         <lombok.version>1.18.12</lombok.version>
-        <micronaut.version>2.3.4</micronaut.version>
+        <micronaut.version>2.4.0</micronaut.version>
         <micronaut-gcp.version>3.4.0</micronaut-gcp.version> <!-- TODO: remove this when micronaut-bom is updated -->
         <micronaut-openapi.version>2.3.1</micronaut-openapi.version>
         <nimbus-jose-jwt.version>9.5</nimbus-jose-jwt.version>
