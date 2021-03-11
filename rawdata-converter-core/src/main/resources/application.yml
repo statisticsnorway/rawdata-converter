@@ -1,4 +1,0 @@
-micronaut:
-  caches:
-    secrets:
-      expire-after-access: 15m
