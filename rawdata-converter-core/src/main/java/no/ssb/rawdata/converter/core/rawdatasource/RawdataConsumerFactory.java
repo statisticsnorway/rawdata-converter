@@ -16,6 +16,7 @@ import no.ssb.rawdata.converter.core.storage.UlidVisitor;
 import no.ssb.rawdata.converter.util.DatasetUriBuilder;
 
 import javax.inject.Singleton;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static net.logstash.logback.argument.StructuredArguments.keyValue;
 
@@ -35,12 +36,19 @@ public class RawdataConsumerFactory {
         ULID.Value initialPositionUlid = resolveInitialPosition(configuredInitialPosition, datasetStorage, datasetUri);
 
         RawdataClient rawdataClient = rawdataClientFactory.rawdataClientOf(jobConfig.getRawdataSource().getName());
-        RawdataConsumer mainRawdataConsumer = rawdataClient.consumer(jobConfig.getRawdataSource().getTopic(), initialPositionUlid, includeInitialPosition(configuredInitialPosition));
-        RawdataConsumer sampleRawdataConsumer = rawdataClient.consumer(jobConfig.getRawdataSource().getTopic());
+        AtomicReference<RawdataConsumer> mainRawdataConsumerRef = new AtomicReference<>();
 
         return RawdataConsumers.builder()
-          .mainRawdataConsumer(mainRawdataConsumer)
-          .sampleRawdataConsumer(sampleRawdataConsumer)
+          .mainRawdataConsumer(() -> {
+              RawdataConsumer consumer = mainRawdataConsumerRef.get();
+              if (consumer == null) {
+                  consumer = rawdataClient.consumer(jobConfig.getRawdataSource().getTopic(), initialPositionUlid, includeInitialPosition(configuredInitialPosition));
+                  mainRawdataConsumerRef.set(consumer);
+              }
+              return consumer;
+          })
+          .sampleRawdataConsumer(() -> rawdataClient.consumer(jobConfig.getRawdataSource().getTopic()))
+          .metadataClient(() -> rawdataClient.metadata(jobConfig.getRawdataSource().getTopic()))
           .build();
     }
 
