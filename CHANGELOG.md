@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.10.3](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.3) (2021-03-11)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.2...0.10.3)
+
+**Implemented enhancements:**
+
+- Upgrade to Micronaut 2.3.x [\#4](https://github.com/statisticsnorway/rawdata-converter/issues/4)
+
+**Merged pull requests:**
+
+- Use secret service for pseudo and client credentials [\#14](https://github.com/statisticsnorway/rawdata-converter/pull/14) ([kschulst](https://github.com/kschulst))
+- Add SecretService [\#13](https://github.com/statisticsnorway/rawdata-converter/pull/13) ([kschulst](https://github.com/kschulst))
+
+## [0.10.2](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.2) (2021-03-03)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.1...0.10.2)
+
+## [0.10.1](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.1) (2021-03-03)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.0...0.10.1)
+
 ## [0.10.0](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.0) (2021-03-03)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.9.5...0.10.0)
