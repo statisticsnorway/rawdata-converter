@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.10.5](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.5) (2021-03-11)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.4...0.10.5)
+
+**Merged pull requests:**
+
+- Allow use of topic metadata instead of samples in V2. [\#16](https://github.com/statisticsnorway/rawdata-converter/pull/16) ([kimcs](https://github.com/kimcs))
+
+## [0.10.4](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.4) (2021-03-11)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.3...0.10.4)
+
+**Implemented enhancements:**
+
+- Upgrade to Micronaut 2.4.x [\#15](https://github.com/statisticsnorway/rawdata-converter/issues/15)
+
 ## [0.10.3](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.3) (2021-03-11)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.2...0.10.3)
