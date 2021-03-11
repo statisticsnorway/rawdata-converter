@@ -16,6 +16,7 @@ import no.ssb.rawdata.api.RawdataClosedException;
 import no.ssb.rawdata.api.RawdataConsumer;
 import no.ssb.rawdata.api.RawdataMessage;
 import no.ssb.rawdata.converter.core.convert.RawdataConverter;
+import no.ssb.rawdata.converter.core.convert.RawdataConverterV2;
 import no.ssb.rawdata.converter.core.crypto.DecryptedRawdataMessage.DecryptRawdataMessageException;
 import no.ssb.rawdata.converter.core.crypto.RawdataDecryptor;
 import no.ssb.rawdata.converter.core.datasetmeta.DatasetType;
@@ -107,7 +108,14 @@ public class ConverterJob {
             throw new IllegalStateException("Converter is configured to store rawdata messages, but no storage path is specified (missing '[job].debug.local-storage-path')");
         }
 
-        rawdataConverter.init(sampleRawdataMessages());
+        if (rawdataConverter instanceof RawdataConverterV2) {
+            // V2, use metadata only, not message samples
+            ((RawdataConverterV2) rawdataConverter).initialize(rawdataConsumers.getMetadataClient().get());
+        } else {
+            // backwards compatibility with V1
+            rawdataConverter.init(sampleRawdataMessages());
+        }
+
         tryPublishDatasetMetadata();
 
         if (jobConfig.isActiveByDefault()) {
@@ -123,7 +131,7 @@ public class ConverterJob {
         executionSummaryProperties.putIfAbsent("time.start", Instant.now().toString());
         runtime.start();
 
-        processRawdataMessages(rawdataMessagesFlowOf(rawdataConsumers.getMainRawdataConsumer()), targetAvroSchema);
+        processRawdataMessages(rawdataMessagesFlowOf(rawdataConsumers.getMainRawdataConsumer().get()), targetAvroSchema);
     }
 
     /**
@@ -157,7 +165,7 @@ public class ConverterJob {
 
     private List<RawdataMessage> sampleRawdataMessages() {
         int sampleCount = Optional.ofNullable(jobConfig.getConverterSettings().getRawdataSamples()).orElse(0);
-        return (sampleCount == 0) ? List.of() : rawdataMessagesListOf(rawdataConsumers.getSampleRawdataConsumer(), sampleCount);
+        return (sampleCount == 0) ? List.of() : rawdataMessagesListOf(rawdataConsumers.getSampleRawdataConsumer().get(), sampleCount);
     }
 
     PublishDatasetMetaEvent createDatasetMetadataEvent() {
@@ -202,7 +210,7 @@ public class ConverterJob {
         RawdataMessage lastRawdataMessage = lastRawdataMessage().orElse(null);
         if (lastRawdataMessage != null) {
             log.info("Resuming rawdata message conversion from last message - " + posAndIdOf(lastRawdataMessage));
-            rawdataConsumers.getMainRawdataConsumer().seek(lastRawdataMessage.timestamp());
+            rawdataConsumers.getMainRawdataConsumer().get().seek(lastRawdataMessage.timestamp());
             runtime.start();
         }
         else {
