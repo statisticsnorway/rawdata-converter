@@ -165,7 +165,9 @@ public class ConverterJob {
 
     private List<RawdataMessage> sampleRawdataMessages() {
         int sampleCount = Optional.ofNullable(jobConfig.getConverterSettings().getRawdataSamples()).orElse(0);
-        return (sampleCount == 0) ? List.of() : rawdataMessagesListOf(rawdataConsumers.getSampleRawdataConsumer().get(), sampleCount);
+        try (RawdataConsumer rawdataConsumer = rawdataConsumers.getSampleRawdataConsumer().get()) {
+            return (sampleCount == 0) ? List.of() : rawdataMessagesListOf(rawdataConsumer, sampleCount);
+        }
     }
 
     PublishDatasetMetaEvent createDatasetMetadataEvent() {
