@@ -1,6 +1,5 @@
 package no.ssb.rawdata.converter.core.job;
 
-import de.huxhorn.sulky.ulid.ULID;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
@@ -95,7 +94,7 @@ public class ConverterJobController {
      */
     @Post("/{jobId}/pause")
     public void pauseJob(String jobId) {
-        jobScheduler.pause(ULID.parseULID(jobId));
+        jobScheduler.pause(jobId);
     }
 
     /**
@@ -103,7 +102,7 @@ public class ConverterJobController {
      */
     @Post("/{jobId}/resume")
     public void resumeJob(String jobId) {
-        jobScheduler.resume(ULID.parseULID(jobId));
+        jobScheduler.resume(jobId);
     }
 
     /**
@@ -111,7 +110,7 @@ public class ConverterJobController {
      */
     @Post("/{jobId}/stop")
     public void stopJob(@PathVariable String jobId) {
-        jobScheduler.stop(ULID.parseULID(jobId));
+        jobScheduler.stop(jobId);
     }
 
     /**
@@ -119,7 +118,7 @@ public class ConverterJobController {
      */
     @Get("/{jobId}/config")
     public HttpResponse<String> getJobConfig(String jobId) {
-        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(ULID.parseULID(jobId)).getJobConfig()));
+        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(jobId).getJobConfig()));
     }
 
     /**
@@ -130,7 +129,7 @@ public class ConverterJobController {
      */
     @Get("/{jobId}/dataset-meta")
     public HttpResponse<String> getJobDatasetMeta(String jobId) {
-        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(ULID.parseULID(jobId)).createDatasetMetadataEvent()));
+        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(jobId).createDatasetMetadataEvent()));
     }
 
     /**
@@ -138,7 +137,7 @@ public class ConverterJobController {
      */
     @Get("/{jobId}/execution-summary")
     public HttpResponse<String> getJobExecutionSummary(String jobId) {
-        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(ULID.parseULID(jobId)).getExecutionSummary()));
+        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(jobId).getExecutionSummary()));
     }
 
     @Data

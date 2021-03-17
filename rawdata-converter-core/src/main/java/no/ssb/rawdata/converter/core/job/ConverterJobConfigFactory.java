@@ -141,7 +141,7 @@ public class ConverterJobConfigFactory {
      */
     ConverterJobConfig getJobConfigFragmentByName(String name) {
         return jobConfigFragments.stream()
-          .filter(jobConfig -> jobConfig.getJobName().equals(name))
+          .filter(jobConfig -> name.equals(jobConfig.getJobName()))
           .findFirst()
           .orElseThrow(() -> new NoConverterJobConfigFoundException("Unknown ConverterJobConfig '" + name + "'"));
     }

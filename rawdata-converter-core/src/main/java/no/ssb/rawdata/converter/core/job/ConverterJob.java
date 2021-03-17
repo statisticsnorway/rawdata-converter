@@ -2,7 +2,6 @@ package no.ssb.rawdata.converter.core.job;
 
 import avro.shaded.com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
-import de.huxhorn.sulky.ulid.ULID;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.reactivex.Flowable;
 import io.reactivex.exceptions.UndeliverableException;
@@ -78,7 +77,7 @@ public class ConverterJob {
         });
     }
 
-    public ULID.Value jobId() {
+    public String jobId() {
         return jobConfig.getJobId();
     }
 

@@ -1,6 +1,5 @@
 package no.ssb.rawdata.converter.core.job;
 
-import de.huxhorn.sulky.ulid.ULID;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.micronaut.context.event.ApplicationEventPublisher;
 import io.micronaut.scheduling.TaskExecutors;
@@ -25,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @RequiredArgsConstructor
 public class ConverterJobScheduler {
 
-    private final Map<ULID.Value, ConverterJob> jobs = new ConcurrentHashMap<>();
+    private final Map<String, ConverterJob> jobs = new ConcurrentHashMap<>();
 
     private final ConverterJobSchedulerConfig jobSchedulerConfig;
     private final ConverterJobConfigFactory effectiveConverterJobConfigFactory;
@@ -64,15 +63,15 @@ public class ConverterJobScheduler {
         }
     }
 
-    public void resumeFromLast(ULID.Value jobId) {
+    public void resumeFromLast(String jobId) {
         getJob(jobId).resumeFromLast();
     }
 
-    public Map<ULID.Value, ConverterJob> getJobs() {
+    public Map<String, ConverterJob> getJobs() {
         return jobs;
     }
 
-    public ConverterJob getJob(ULID.Value jobId) {
+    public ConverterJob getJob(String jobId) {
         return Optional.ofNullable(jobs.get(jobId))
           .orElseThrow(() -> new NoSuchElementException("Unable to find job with id=" + jobId));
     }
@@ -82,7 +81,7 @@ public class ConverterJobScheduler {
         return startedJobsCount < jobSchedulerConfig.getMaxConcurrentJobs();
     }
 
-    public void resume(ULID.Value jobId) {
+    public void resume(String jobId) {
         getJob(jobId).resume();
     }
 
@@ -90,7 +89,7 @@ public class ConverterJobScheduler {
         jobs.values().stream().filter(job -> job.runtime().isPaused()).forEach(job -> job.resume());
     }
 
-    public void pause(ULID.Value jobId) {
+    public void pause(String jobId) {
         getJob(jobId).pause();
     }
 
@@ -98,7 +97,7 @@ public class ConverterJobScheduler {
         jobs.values().stream().filter(job -> job.runtime().isPauseable()).forEach(job -> job.pause());
     }
 
-    public void stop(ULID.Value jobId) {
+    public void stop(String jobId) {
         getJob(jobId).stop();
     }
 

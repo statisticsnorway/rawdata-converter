@@ -38,11 +38,13 @@ public class ConverterJobConfig implements Serializable {
 
     public ConverterJobConfig(@Parameter String jobName) {
         this.jobName = jobName;
-        this.jobId = new ULID().nextValue();
+        this.jobId = new ULID().nextValue().toString();
     }
 
-    /** The job identifier */
-    private ULID.Value jobId;
+    /**
+     * The job identifier
+     */
+    private String jobId;
 
     /**
      * The job name
