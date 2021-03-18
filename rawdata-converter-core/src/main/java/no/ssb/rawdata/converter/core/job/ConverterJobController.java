@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import no.ssb.rawdata.converter.util.Json;
 
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 // TODO Make conditional on property
@@ -137,7 +138,13 @@ public class ConverterJobController {
      */
     @Get("/{jobId}/execution-summary")
     public HttpResponse<String> getJobExecutionSummary(String jobId) {
-        return HttpResponse.ok(Json.prettyFrom(jobScheduler.getJob(jobId).getExecutionSummary()));
+        ConverterJob job;
+        try {
+            job = jobScheduler.getJob(jobId);
+        } catch (NoSuchElementException e) {
+            return HttpResponse.notFound();
+        }
+        return HttpResponse.ok(Json.prettyFrom(job.getExecutionSummary()));
     }
 
     @Data
