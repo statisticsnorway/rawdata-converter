@@ -14,6 +14,7 @@ import no.ssb.dapla.storage.client.DatasetStorage;
 import no.ssb.rawdata.api.RawdataClosedException;
 import no.ssb.rawdata.api.RawdataConsumer;
 import no.ssb.rawdata.api.RawdataMessage;
+import no.ssb.rawdata.converter.core.convert.ConversionResult;
 import no.ssb.rawdata.converter.core.convert.RawdataConverter;
 import no.ssb.rawdata.converter.core.convert.RawdataConverterV2;
 import no.ssb.rawdata.converter.core.crypto.DecryptedRawdataMessage.DecryptRawdataMessageException;
@@ -400,7 +401,21 @@ public class ConverterJob {
                         lastRawdataMessages.pollLast();
                     }
 
-                    return rawdataConverter.convert(rawdataMessage);
+                    ConversionResult conversionResult = rawdataConverter.convert(rawdataMessage);
+                    List<Exception> failures = conversionResult.getFailures();
+                    if (failures.size() > 0) {
+                        String message = String.format("While converting record with position: %s, and ulid: %s", rawdataMessage.position(), rawdataMessage.ulid().toString());
+                        RuntimeException exception = null;
+                        for (Exception failure : failures) {
+                            if (exception == null) {
+                                exception = new RuntimeException(message, failure);
+                            } else {
+                                exception.addSuppressed(failure);
+                            }
+                        }
+                        throw exception;
+                    }
+                    return conversionResult;
                 })
                 .map(conversionResult -> { // Gather metrics
                     jobMetrics.appendConversionResult(conversionResult); // TODO: Use async events for this instead
