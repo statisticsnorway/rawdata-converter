@@ -2,6 +2,7 @@ package no.ssb.rawdata.converter.core.crypto;
 
 import lombok.extern.slf4j.Slf4j;
 import no.ssb.rawdata.api.RawdataMessage;
+import no.ssb.rawdata.payload.encryption.Algorithm;
 import no.ssb.rawdata.payload.encryption.EncryptionClient;
 
 import javax.annotation.Nullable;
@@ -18,9 +19,9 @@ public class RawdataDecryptor {
 
     public RawdataDecryptor(
       @Nullable char[] encryptionKey,
-      @Nullable byte[] encryptionSalt
-    ) {
-        this.encryptionClient = new EncryptionClient();
+      @Nullable byte[] encryptionSalt,
+      Algorithm algorithm) {
+        this.encryptionClient = new EncryptionClient(algorithm);
         isEncryptionActive = encryptionKey != null && encryptionSalt != null;
 
         if (isEncryptionActive) {

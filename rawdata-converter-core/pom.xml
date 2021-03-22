@@ -183,6 +183,11 @@
             <groupId>no.ssb.spi</groupId>
             <artifactId>service-provider-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>no.ssb.dapla.ingest</groupId>
+            <artifactId>dapla-rawdata-metadata-api</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
 
         <!-- Test -->
         <dependency>

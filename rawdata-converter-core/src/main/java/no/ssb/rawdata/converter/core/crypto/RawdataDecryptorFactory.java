@@ -1,10 +1,16 @@
 package no.ssb.rawdata.converter.core.crypto;
 
 import lombok.RequiredArgsConstructor;
+import no.ssb.dapla.ingest.rawdata.metadata.RawdataStructure;
+import no.ssb.rawdata.api.RawdataMetadataClient;
 import no.ssb.rawdata.converter.core.exception.RawdataConverterException;
 import no.ssb.rawdata.converter.core.job.ConverterJobConfig;
+import no.ssb.rawdata.payload.encryption.Algorithm;
 
 import javax.inject.Singleton;
+import java.util.Map;
+
+import static java.util.Optional.ofNullable;
 
 @Singleton
 @RequiredArgsConstructor
@@ -15,8 +21,37 @@ public class RawdataDecryptorFactory {
      */
     private final EncryptionCredentialsService encryptionCredentialsService;
 
-    public RawdataDecryptor rawdataDecryptorOf(ConverterJobConfig jobConfig) {
-        return new RawdataDecryptor(rawdataEncryptionKeyOf(jobConfig.getRawdataSource()), rawdataEncryptionSaltOf(jobConfig.getRawdataSource()));
+    public RawdataDecryptor rawdataDecryptorOf(RawdataMetadataClient metadataClient, ConverterJobConfig jobConfig) {
+        RawdataStructure rawdataStructure = ofNullable(metadataClient.get("structure.json"))
+                .map(RawdataStructure::of)
+                .map(RawdataStructure.Builder::build)
+                .orElse(null);
+        return new RawdataDecryptor(
+                rawdataStructure != null ? rawdataEncryptionKeyOfRawdataStructure(rawdataStructure) : rawdataEncryptionKeyOf(jobConfig.getRawdataSource()),
+                rawdataStructure != null ? rawdataEncryptionSaltOfRawdataStructure(rawdataStructure) : rawdataEncryptionSaltOf(jobConfig.getRawdataSource()),
+                rawdataStructure != null ? rawdataEncryptionAlgorithmOfRawdataStructure(rawdataStructure) : Algorithm.AES128
+        );
+    }
+
+    private char[] rawdataEncryptionKeyOfRawdataStructure(RawdataStructure rawdataStructure) {
+        String keyId = null;
+        String version = null;
+        for (Map.Entry<String, RawdataStructure.Document> entry : rawdataStructure.documents().entrySet()) {
+            RawdataStructure.Document.Encryption encryption = entry.getValue().encryption();
+            if (encryption != null) {
+                keyId = encryption.key();
+                version = encryption.version();
+                break;
+            }
+        }
+        if (keyId == null) {
+            return null;
+        }
+        if (version == null || version.isEmpty()) {
+            return encryptionCredentialsService.getKey(keyId);
+        } else {
+            return encryptionCredentialsService.getKey(keyId, version);
+        }
     }
 
     private char[] rawdataEncryptionKeyOf(ConverterJobConfig.RawdataSourceRef rawdataSource) {
@@ -40,6 +75,26 @@ public class RawdataDecryptorFactory {
 
     private boolean isEncryptionConfigured(ConverterJobConfig.RawdataSourceRef rawdataSource) {
         return rawdataSource.getEncryptionKeyId() != null || rawdataSource.getEncryptionKey() != null;
+    }
+
+    private Algorithm rawdataEncryptionAlgorithmOfRawdataStructure(RawdataStructure rawdataStructure) {
+        for (Map.Entry<String, RawdataStructure.Document> entry : rawdataStructure.documents().entrySet()) {
+            RawdataStructure.Document.Encryption encryption = entry.getValue().encryption();
+            if (encryption != null) {
+                return encryption.algorithm();
+            }
+        }
+        throw new MissingRawdataEncryptionCredentialsException("No rawdata encryption algorithm configured in metadata for topic.");
+    }
+
+    private byte[] rawdataEncryptionSaltOfRawdataStructure(RawdataStructure rawdataStructure) {
+        for (Map.Entry<String, RawdataStructure.Document> entry : rawdataStructure.documents().entrySet()) {
+            RawdataStructure.Document.Encryption encryption = entry.getValue().encryption();
+            if (encryption != null) {
+                return encryption.salt();
+            }
+        }
+        throw new MissingRawdataEncryptionCredentialsException("No rawdata encryption salt configured in metadata for topic.");
     }
 
     private byte[] rawdataEncryptionSaltOf(ConverterJobConfig.RawdataSourceRef rawdataSource) {

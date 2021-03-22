@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.ssb.rawdata.converter.core.convert.RawdataConverterFactory;
 import no.ssb.rawdata.converter.core.crypto.RawdataDecryptorFactory;
 import no.ssb.rawdata.converter.core.rawdatasource.RawdataConsumerFactory;
+import no.ssb.rawdata.converter.core.rawdatasource.RawdataConsumers;
 import no.ssb.rawdata.converter.core.storage.DatasetStorageFactory;
 import no.ssb.rawdata.converter.core.storage.StorageType;
 
@@ -44,11 +45,12 @@ public class ConverterJobScheduler {
     @ExecuteOn(TaskExecutors.IO)
     public void schedule(ConverterJobConfig jobConfig) {
         if (canAcceptJobs()) {
+            RawdataConsumers rawdataConsumers = rawdataConsumerFactory.rawdataConsumersOf(jobConfig);
             ConverterJob job = ConverterJob.builder()
               .jobConfig(jobConfig)
               .rawdataConverter(rawdataConverterFactory.newRawdataConverter(jobConfig))
-              .rawdataConsumers(rawdataConsumerFactory.rawdataConsumersOf(jobConfig))
-              .rawdataDecryptor(rawdataDecryptorFactory.rawdataDecryptorOf(jobConfig)) //TODO: Support rawdataDecryptor=null
+              .rawdataConsumers(rawdataConsumers)
+              .rawdataDecryptor(rawdataDecryptorFactory.rawdataDecryptorOf(rawdataConsumers.getMetadataClient().get(), jobConfig)) //TODO: Support rawdataDecryptor=null
               .datasetStorage(datasetStorageFactory.datasetStorageOf(StorageType.of(jobConfig.getTargetStorage().getRoot()), jobConfig.getTargetStorage().getSaKeyFile()))
               .localStorage(new ConverterJobLocalStorage(jobConfig, eventPublisher)) // TODO: Initialize this internally instead?
               .jobMetrics(new ConverterJobMetrics(prometheusMeterRegistry, jobConfig)) // TODO: Initialize this internally instead?

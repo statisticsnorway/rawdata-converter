@@ -14,13 +14,15 @@ public class SecretServiceConfig {
     public static final String PREFIX = "services.secrets";
 
     public enum Impl {
-        GCP, LOCAL, MOCK;
+        GCP, LOCAL, MOCK, PROPFILE;
     }
 
     /**
      * The SecretService implementation to use. Defaults to MOCK if not specified.
      */
     private Impl impl = Impl.MOCK;
+
+    private String file;
 
     /**
      * A map of hardcoded secrets that will override any secret IDs. This can be handy in testing situations. Secrets
