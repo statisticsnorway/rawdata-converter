@@ -312,9 +312,17 @@ public class ConverterJob {
                       .subscribe(
                         onNext -> {},
                         exception -> {
+                            if (rawdataConverter instanceof RawdataConverterV2) {
+                                ((RawdataConverterV2) rawdataConverter).onError(exception);
+                            }
                             deactivateAndLogProcessingError("Error processing rawdata", lastRawdataMessage().orElse(null), exception);
                         },
-                        () -> log.info("Rawdata stream completed")
+                        () -> {
+                            if (rawdataConverter instanceof RawdataConverterV2) {
+                                ((RawdataConverterV2) rawdataConverter).onComplete();
+                            }
+                            log.info("Rawdata stream completed");
+                        }
                       );
                 }
 
@@ -333,9 +341,17 @@ public class ConverterJob {
                           log.info("[{}] Write converted records @{}/{}, pos={}, ulid={}", jobId(), jobConfig.getRawdataSource().getName(), jobConfig.getRawdataSource().getTopic(), lastPos, lastUlid);
                       },
                       exception -> {
+                          if (rawdataConverter instanceof RawdataConverterV2) {
+                              ((RawdataConverterV2) rawdataConverter).onError(exception);
+                          }
                           deactivateAndLogProcessingError("Error processing rawdata", lastRawdataMessage().orElse(null), exception);
                       },
-                      () -> log.info("Rawdata stream completed")
+                      () -> {
+                          if (rawdataConverter instanceof RawdataConverterV2) {
+                              ((RawdataConverterV2) rawdataConverter).onComplete();
+                          }
+                          log.info("Rawdata stream completed");
+                      }
                     );
                 }
             }

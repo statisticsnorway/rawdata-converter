@@ -18,4 +18,8 @@ public interface RawdataConverterV2 extends RawdataConverter {
     default void init(Collection<RawdataMessage> sampleRawdataMessages) {
         // do nothing, we expect call to initialize instead in V2.
     }
+
+    void onError(Throwable t);
+
+    void onComplete();
 }
