@@ -359,8 +359,16 @@ public class ConverterJob {
     }
 
     void deactivateAndLogProcessingError(String errorMessage, RawdataMessage rawdataMessage, Throwable cause) {
-        log.error(errorMessage + " - " + posAndIdOf(rawdataMessage) + ". Deactivating converter", cause);
-        this.pause();
+
+        if (jobConfig.getConverterSettings().shouldSkipRawdataOnErrors()) {
+            log.warn(errorMessage + " - " + posAndIdOf(rawdataMessage) + ". Skipping erroneous rawdata record and continuing conversion.");
+            jobMetrics.appendFailedMessagesCount();
+        }
+        else {
+            log.error(errorMessage + " - " + posAndIdOf(rawdataMessage) + ". Deactivating converter", cause);
+            this.pause();
+        }
+
         if (rawdataMessage == null) {
             return;
         }

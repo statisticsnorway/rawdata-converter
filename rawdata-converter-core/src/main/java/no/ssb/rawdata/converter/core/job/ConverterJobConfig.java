@@ -312,6 +312,25 @@ public class ConverterJobConfig implements Serializable {
          * accompanying technical debt.</p>
          */
         private Set<String> skippedMessages;
+
+        /**
+         * <p>If true, the converter will skip any record that for any reason fails to be converted. Notice that
+         * erroneous record will be logged or saved locally if you have enabled this in the converter job debug config.
+         * </p>
+         *
+         * <p>This option can be handy e.g. if the rawdata record does not meet expected requirements, such as it being
+         * improperly encoded or invalidly formatted. Without this flag turned on, the converter will halt when
+         * encountering such rawdata records.</p>
+         *
+         * <p>Enable this only if it is acceptable to lose data.</p>
+         *
+         * <p>Default: false</p>
+         */
+        private Boolean skipRawdataOnErrors;
+
+        public boolean shouldSkipRawdataOnErrors() {
+            return Optional.ofNullable(skipRawdataOnErrors).orElse(false);
+        }
     }
 
     @ConfigurationProperties("rawdata-source")

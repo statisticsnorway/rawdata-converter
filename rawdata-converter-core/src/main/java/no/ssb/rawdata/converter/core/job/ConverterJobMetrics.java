@@ -122,6 +122,10 @@ public class ConverterJobMetrics {
         incrementCounter(RAWDATA_MESSAGES_TOTAL_SKIP);
     }
 
+    public void appendFailedMessagesCount() {
+        incrementCounter(RAWDATA_MESSAGES_TOTAL_FAIL);
+    }
+
     public Map<String, Double> getExecutionSummaryMetrics() {
         return counters.entrySet().stream()
           .collect(Collectors.toMap(
