@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.11.1](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.1) (2021-05-20)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.0...0.11.1)
+
+**Closed issues:**
+
+- Add option to ignore conversion errors [\#19](https://github.com/statisticsnorway/rawdata-converter/issues/19)
+
+## [0.11.0](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.0) (2021-04-15)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.6...0.11.0)
+
+**Fixed bugs:**
+
+- Retrieving secrets without an explicit version should default to using "latest" as version [\#17](https://github.com/statisticsnorway/rawdata-converter/issues/17)
+
+## [0.10.6](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.6) (2021-03-11)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.5...0.10.6)
+
 ## [0.10.5](https://github.com/statisticsnorway/rawdata-converter/tree/0.10.5) (2021-03-11)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.10.4...0.10.5)
