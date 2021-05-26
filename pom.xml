@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>no.ssb.rawdata.converter</groupId>
     <artifactId>rawdata-converter</artifactId>
-    <version>0.11.2-SNAPSHOT</version>
+    <version>0.11.2</version>
     <packaging>pom</packaging>
 
     <name>Rawdata Converter Application Building Blocks</name>
@@ -22,7 +22,7 @@
         <connection>scm:git:git://github.com/statisticsnorway/rawdata-converter.git</connection>
         <developerConnection>scm:git:git@github.com:statisticsnorway/rawdata-converter.git</developerConnection>
         <url>https://github.com/statisticsnorway/rawdata-converter</url>
-        <tag>HEAD</tag>
+        <tag>0.11.2</tag>
     </scm>
 
     <licenses>
