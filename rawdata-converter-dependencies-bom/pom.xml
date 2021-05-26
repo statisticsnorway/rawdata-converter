@@ -39,7 +39,7 @@
         <ssb.dapla-readiness.version>1.0.0</ssb.dapla-readiness.version>
         <ssb.dapla-storage-client.version>4.2.0</ssb.dapla-storage-client.version>
         <ssb.rawdata-client-api.version>0.28</ssb.rawdata-client-api.version>
-        <ssb.rawdata-client-provider-gcs.version>0.13</ssb.rawdata-client-provider-gcs.version>
+        <ssb.rawdata-client-provider-gcs.version>0.15</ssb.rawdata-client-provider-gcs.version>
         <ssb.rawdata-client-provider-postgres.version>0.12</ssb.rawdata-client-provider-postgres.version>
         <ssb.rawdata-crypto-util.version>0.1</ssb.rawdata-crypto-util.version>
         <ssb.service-provider-api.version>0.4</ssb.service-provider-api.version>
