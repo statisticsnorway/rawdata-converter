@@ -9,6 +9,7 @@ import no.ssb.rawdata.payload.encryption.Algorithm;
 
 import javax.inject.Singleton;
 import java.util.Map;
+import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
 
@@ -22,15 +23,25 @@ public class RawdataDecryptorFactory {
     private final EncryptionCredentialsService encryptionCredentialsService;
 
     public RawdataDecryptor rawdataDecryptorOf(RawdataMetadataClient metadataClient, ConverterJobConfig jobConfig) {
-        RawdataStructure rawdataStructure = ofNullable(metadataClient.get("structure.json"))
-                .map(RawdataStructure::of)
-                .map(RawdataStructure.Builder::build)
-                .orElse(null);
+        RawdataStructure rawdataStructure = tryResolveRawdataStructure(metadataClient).orElse(null);
+
         return new RawdataDecryptor(
                 rawdataStructure != null ? rawdataEncryptionKeyOfRawdataStructure(rawdataStructure) : rawdataEncryptionKeyOf(jobConfig.getRawdataSource()),
                 rawdataStructure != null ? rawdataEncryptionSaltOfRawdataStructure(rawdataStructure) : rawdataEncryptionSaltOf(jobConfig.getRawdataSource()),
                 rawdataStructure != null ? rawdataEncryptionAlgorithmOfRawdataStructure(rawdataStructure) : Algorithm.AES128
         );
+    }
+
+    private Optional<RawdataStructure> tryResolveRawdataStructure(RawdataMetadataClient metadataClient) {
+        try {
+            return ofNullable(metadataClient.get("structure.json"))
+              .map(RawdataStructure::of)
+              .map(RawdataStructure.Builder::build);
+        }
+        catch (Exception e) {
+            // ok to swallow - could be "StorageException: 404 Not Found" if structure.json metadata was not found
+            return Optional.empty();
+        }
     }
 
     private char[] rawdataEncryptionKeyOfRawdataStructure(RawdataStructure rawdataStructure) {
