@@ -5,7 +5,7 @@
     <parent>
         <groupId>no.ssb.rawdata.converter</groupId>
         <artifactId>rawdata-converter</artifactId>
-        <version>0.11.5</version>
+        <version>0.11.6-SNAPSHOT</version>
     </parent>
 
     <artifactId>rawdata-converter-bom</artifactId>
@@ -20,12 +20,12 @@
             <dependency>
                 <groupId>no.ssb.rawdata.converter</groupId>
                 <artifactId>rawdata-converter-core</artifactId>
-                <version>0.11.5</version>
+                <version>0.11.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>no.ssb.rawdata.converter</groupId>
                 <artifactId>rawdata-converter-testutils</artifactId>
-                <version>0.11.5</version>
+                <version>0.11.6-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
