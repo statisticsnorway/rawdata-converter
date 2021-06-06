@@ -3,7 +3,7 @@
     <parent>
         <groupId>no.ssb.rawdata.converter</groupId>
         <artifactId>rawdata-converter-dependencies-bom</artifactId>
-        <version>0.11.6-SNAPSHOT</version>
+        <version>0.11.6</version>
         <relativePath>../rawdata-converter-dependencies-bom</relativePath>
     </parent>
 
