@@ -1,5 +1,39 @@
 # Changelog
 
+## [0.11.7](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.7) (2021-06-30)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.6...0.11.7)
+
+**Implemented enhancements:**
+
+- Pseudonymization report [\#23](https://github.com/statisticsnorway/rawdata-converter/issues/23)
+- Option to specify non-encrypted rawdata message items [\#22](https://github.com/statisticsnorway/rawdata-converter/issues/22)
+- Support filtering and ordering of job execution summaries [\#21](https://github.com/statisticsnorway/rawdata-converter/issues/21)
+
+## [0.11.6](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.6) (2021-06-06)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.5...0.11.6)
+
+## [0.11.5](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.5) (2021-05-29)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.4...0.11.5)
+
+## [0.11.4](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.4) (2021-05-29)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.3...0.11.4)
+
+## [0.11.3](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.3) (2021-05-27)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.2...0.11.3)
+
+**Fixed bugs:**
+
+- Rawdata client provider GCS if metadata could not be resolved [\#20](https://github.com/statisticsnorway/rawdata-converter/issues/20)
+
+## [0.11.2](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.2) (2021-05-26)
+
+[Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.1...0.11.2)
+
 ## [0.11.1](https://github.com/statisticsnorway/rawdata-converter/tree/0.11.1) (2021-05-20)
 
 [Full Changelog](https://github.com/statisticsnorway/rawdata-converter/compare/0.11.0...0.11.1)
