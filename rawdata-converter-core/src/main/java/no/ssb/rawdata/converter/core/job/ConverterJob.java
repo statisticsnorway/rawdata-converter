@@ -21,6 +21,8 @@ import no.ssb.rawdata.converter.core.crypto.DecryptedRawdataMessage.DecryptRawda
 import no.ssb.rawdata.converter.core.crypto.RawdataDecryptor;
 import no.ssb.rawdata.converter.core.datasetmeta.DatasetType;
 import no.ssb.rawdata.converter.core.datasetmeta.PublishDatasetMetaEvent;
+import no.ssb.rawdata.converter.core.pseudo.report.PseudoReport;
+import no.ssb.rawdata.converter.core.pseudo.report.PseudoReportFactory;
 import no.ssb.rawdata.converter.core.rawdatasource.RawdataConsumers;
 import no.ssb.rawdata.converter.util.DatasetUriBuilder;
 import no.ssb.rawdata.converter.util.Jq;
@@ -62,6 +64,7 @@ public class ConverterJob {
     @NonNull private final ApplicationEventPublisher eventPublisher;
     @NonNull private final ConverterJobLocalStorage localStorage; // TODO: Initialize internally instead of in Scheduler
     @NonNull private final ConverterJobMetrics jobMetrics;
+    @NonNull private final PseudoReportFactory pseudoReportFactory;
 
     static {
         // Handle errors that couldn't be emitted due to the downstream reaching its terminal state, or the cancellation
@@ -128,8 +131,8 @@ public class ConverterJob {
 
         Schema targetAvroSchema = rawdataConverter.targetAvroSchema();
 
-        executionSummaryProperties.putIfAbsent("time.start", Instant.now().toString());
         runtime.start();
+        executionSummaryProperties.putIfAbsent("time.start", runtime.getStartedTime().toString());
 
         processRawdataMessages(rawdataMessagesFlowOf(rawdataConsumers.getMainRawdataConsumer().get()), targetAvroSchema);
     }
@@ -220,6 +223,14 @@ public class ConverterJob {
         }
     }
 
+    public Instant getStartedTime() {
+        return runtime.getStartedTime();
+    }
+
+    public Instant getStoppedTime() {
+        return runtime.getStoppedTime();
+    }
+
     public ConverterJobConfig getJobConfig() {
         return jobConfig;
     }
@@ -233,6 +244,7 @@ public class ConverterJob {
         summary.putAll(ImmutableMap.<String,Object>builder()
           .put("job.id", jobConfig.getJobId().toString())
           .put("job.status", runtime.getState())
+          .put("job.dryrun", jobConfig.getDebug().getDryrun())
           .put("position.current", posAndIdOf(lastRawdataMessage().orElse(null)))
           .put("target.storage.root", jobConfig.getTargetStorage().getRoot())
           .put("target.storage.path", jobConfig.getTargetStorage().getPath())

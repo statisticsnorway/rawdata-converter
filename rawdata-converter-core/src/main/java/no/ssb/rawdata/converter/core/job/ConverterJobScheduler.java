@@ -16,10 +16,15 @@ import no.ssb.rawdata.converter.core.storage.DatasetStorageFactory;
 import no.ssb.rawdata.converter.core.storage.StorageType;
 
 import javax.inject.Singleton;
+import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Singleton
 @Slf4j
@@ -74,6 +79,15 @@ public class ConverterJobScheduler {
 
     public Map<String, ConverterJob> getJobs() {
         return jobs;
+    }
+
+    public Map<String, ConverterJob> getJobs(Predicate<ConverterJob> converterJobFilter) {
+        return jobs.values().stream()
+          .filter(converterJobFilter)
+          .collect(Collectors.toMap(
+            j -> j.getJobConfig().getJobId(),
+            Function.identity())
+          );
     }
 
     public ConverterJob getJob(String jobId) {

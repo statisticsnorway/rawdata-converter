@@ -2,6 +2,8 @@ package no.ssb.rawdata.converter.core.job;
 
 import com.google.common.base.Stopwatch;
 
+import java.time.Instant;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkState;
@@ -17,6 +19,8 @@ class ConverterJobRuntime {
 
     private final Stopwatch stopwatch = Stopwatch.createUnstarted();
     private State state = NEW;
+    private Instant startedTime;
+    private Instant stoppedTime;
 
     public State getState() {
         return state;
@@ -34,6 +38,7 @@ class ConverterJobRuntime {
         checkState(isStartable(), "Cannot start from " + state + " state");
         state = STARTED;
         if (! stopwatch.isRunning()) {
+            startedTime = Instant.now();
             stopwatch.start();
         }
     }
@@ -50,6 +55,7 @@ class ConverterJobRuntime {
         checkState(isStoppable(), "Cannot stop from " + state + " state");
         state = STOPPED;
         if (stopwatch.isRunning()) {
+            stoppedTime = Instant.now();
             stopwatch.stop();
         }
     }
@@ -76,6 +82,14 @@ class ConverterJobRuntime {
 
     public boolean isStopped() {
         return state == STOPPED;
+    }
+
+    public Instant getStartedTime() {
+        return startedTime;
+    }
+
+    public Instant getStoppedTime() {
+        return stoppedTime;
     }
 
 }

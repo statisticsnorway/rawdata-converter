@@ -1,18 +1,36 @@
 package no.ssb.rawdata.converter.core.job;
 
+import avro.shaded.com.google.common.collect.Sets;
+import io.micronaut.core.annotation.Nullable;
+import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Error;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
+import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.http.hateoas.JsonError;
+import io.micronaut.http.hateoas.Link;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import no.ssb.rawdata.converter.core.pseudo.report.PseudoReport;
 import no.ssb.rawdata.converter.util.Json;
 
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 // TODO Make conditional on property
@@ -48,13 +66,45 @@ public class ConverterJobController {
     }
 */
 
+    private Set<Predicate<ConverterJob>> jobStatusPredicatesOf(Collection<String> jobStatusFilterList) {
+        Set<String> jobStatusFilter = (jobStatusFilterList == null)
+          ? Set.of()
+          : new LinkedHashSet<>(jobStatusFilterList);
+
+        Set<Predicate<ConverterJob>> predicates = new LinkedHashSet<>();
+        for (String status : jobStatusFilter) {
+            predicates.add(job ->
+                status.equalsIgnoreCase(String.valueOf(job.getExecutionSummary().get("job.status")))
+            );
+        }
+
+        return predicates;
+    }
+
     /**
      * List all converter job execution summaries
      */
-    @Get("/execution-summary")
-    public HttpResponse<String> getJobExecutionSummary() {
+    @Get("/execution-summary{?status,include-dryrun}")
+    public HttpResponse<String> getJobExecutionSummary(@Nullable @QueryValue("status") Set<String> includedStatuses,
+                                                       @Nullable @QueryValue("include-dryrun") Boolean includeDryrun,
+                                                       @Nullable @QueryValue("started-before") String startedBeforeOffset,
+                                                       @Nullable @QueryValue("started-after") String startedAfterOffset,
+                                                       @Nullable @QueryValue("stopped-before") String stoppedBeforeOffset,
+                                                       @Nullable @QueryValue("stopped-after") String stoppedAfterOffset) {
+        Predicate<ConverterJob> filter = new ConverterJobFilterBuilder()
+          .jobStatus(includedStatuses)
+          .dryrun(includeDryrun)
+          .startedBefore(startedBeforeOffset)
+          .startedAfter(startedAfterOffset)
+          .stoppedBefore(stoppedBeforeOffset)
+          .stoppedAfter(stoppedAfterOffset)
+          .build();
+
+        Map<String, ConverterJob> filteredJobs = jobScheduler.getJobs(filter);
+
         return HttpResponse.ok(Json.prettyFrom(
-          jobScheduler.getJobs().values().stream()
+          filteredJobs.values().stream()
+            .sorted(Comparator.comparing(ConverterJob::getStartedTime).reversed())
             .map(job -> job.getExecutionSummary())
             .collect(Collectors.toList()))
         );
@@ -196,6 +246,16 @@ public class ConverterJobController {
             .build()
         );
     }
+
+    @Error
+    public HttpResponse<JsonError> converterJobFilterError(HttpRequest request, ConverterJobFilterBuilder.InvalidConverterJobFilterException e) {
+        JsonError error = new JsonError(e.getMessage())
+          .link(Link.SELF, Link.of(request.getUri()));
+
+        return HttpResponse.<JsonError>status(HttpStatus.BAD_REQUEST, e.getMessage())
+          .body(error);
+    }
+
     @Data
     public static class StartConverterJobRequest {
         private ConverterJobConfig jobConfig;
