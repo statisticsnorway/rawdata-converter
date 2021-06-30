@@ -1,6 +1,5 @@
 package no.ssb.rawdata.converter.core.job;
 
-import avro.shaded.com.google.common.collect.Sets;
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
@@ -23,12 +22,9 @@ import no.ssb.rawdata.converter.util.Json;
 
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

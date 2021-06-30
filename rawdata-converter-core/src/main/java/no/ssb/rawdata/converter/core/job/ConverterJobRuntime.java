@@ -3,7 +3,6 @@ package no.ssb.rawdata.converter.core.job;
 import com.google.common.base.Stopwatch;
 
 import java.time.Instant;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.common.base.Preconditions.checkState;

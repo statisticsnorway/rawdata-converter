@@ -16,11 +16,9 @@ import no.ssb.rawdata.converter.core.storage.DatasetStorageFactory;
 import no.ssb.rawdata.converter.core.storage.StorageType;
 
 import javax.inject.Singleton;
-import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
