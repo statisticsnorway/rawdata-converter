@@ -6,6 +6,8 @@ import no.ssb.rawdata.payload.encryption.Algorithm;
 import no.ssb.rawdata.payload.encryption.EncryptionClient;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 public class RawdataDecryptor {
@@ -16,12 +18,14 @@ public class RawdataDecryptor {
     private final EncryptionClient encryptionClient;
     private final boolean isEncryptionActive;
     private final byte[] rawdataStorageSecretKey;
+    private final Set<String> nonEncryptedItems;
 
     public RawdataDecryptor(
       @Nullable char[] encryptionKey,
       @Nullable byte[] encryptionSalt,
-      Algorithm algorithm) {
+      Algorithm algorithm, Set<String> nonEncryptedItems) {
         this.encryptionClient = new EncryptionClient(algorithm);
+        this.nonEncryptedItems = Optional.ofNullable(nonEncryptedItems).orElse(Set.of());
         isEncryptionActive = encryptionKey != null && encryptionSalt != null;
 
         if (isEncryptionActive) {
@@ -41,7 +45,7 @@ public class RawdataDecryptor {
      */
     public RawdataMessage tryDecrypt(RawdataMessage rawdataMessage) {
         return isEncryptionActive
-          ? new DecryptedRawdataMessage(rawdataMessage, encryptionClient, rawdataStorageSecretKey)
+          ? new DecryptedRawdataMessage(rawdataMessage, encryptionClient, rawdataStorageSecretKey, nonEncryptedItems)
           : rawdataMessage;
     }
 

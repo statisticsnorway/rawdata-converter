@@ -13,11 +13,12 @@ public class DecryptedRawdataMessage implements RawdataMessage {
     private final RawdataMessage delegate;
     private final EncryptionClient encryptionClient;
     private final Map<String, byte[]> decryptedData = new LinkedHashMap<>();
-    private static final Set<String> NONENCRYPTED_DATA_ITEMS = Set.of("manifest.json");
+    private final Set<String> nonEncrypedItems;
 
-    public DecryptedRawdataMessage(RawdataMessage rawdataMessage, EncryptionClient encryptionClient, byte[] secretKey) {
+    public DecryptedRawdataMessage(RawdataMessage rawdataMessage, EncryptionClient encryptionClient, byte[] secretKey, Set<String> nonEncrypedItems) {
         this.delegate = rawdataMessage;
         this.encryptionClient = encryptionClient;
+        this.nonEncrypedItems = nonEncrypedItems;
         try {
             decryptData(secretKey);
         } catch (Exception e) {
@@ -29,7 +30,7 @@ public class DecryptedRawdataMessage implements RawdataMessage {
 
     private void decryptData(byte[] secretKey) {
         for (Map.Entry<String, byte[]> entry : delegate.data().entrySet()) {
-            byte[] decryptedContent = NONENCRYPTED_DATA_ITEMS.contains(entry.getKey())
+            byte[] decryptedContent = nonEncrypedItems.contains(entry.getKey())
               ? entry.getValue()
               : encryptionClient.decrypt(secretKey, entry.getValue());
 //

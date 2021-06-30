@@ -222,19 +222,30 @@ public class RawdataMessageAdapter {
             return Collections.EMPTY_MAP;
         }
 
-        List<Map<String,Object>> manifestItems = Json.toObject(new TypeReference<List<Map<String,Object>>>() {}, manifestJson);
+        try {
+            List<Map<String,Object>> manifestItems = Json.toObject(new TypeReference<List<Map<String,Object>>>() {}, manifestJson);
+            return manifestItems.stream()
+              .map(ItemMetadata::new)
+              .collect(Collectors.toMap(
+                ItemMetadata::getContentKey,
+                Function.identity(),
 
-        return manifestItems.stream()
-          .map(ItemMetadata::new)
-          .collect(Collectors.toMap(
-            ItemMetadata::getContentKey,
-            Function.identity(),
+                // Keep the last if multiple entries with the same content-key is encountered.
+                // (this should not happen, and would be a bug in the data collector)
+                // TODO: log this?
+                (i1, i2) -> i2)
+              );
+        }
+        catch (Json.JsonException e) {
+            throw new RawdataManifestParseException(message, e);
+        }
+    }
 
-            // Keep the last if multiple entries with the same content-key is encountered.
-            // (this should not happen, and would be a bug in the data collector)
-            // TODO: log this?
-            (i1, i2) -> i2)
-          );
+    public static class RawdataManifestParseException extends RuntimeException {
+        public RawdataManifestParseException(RawdataMessage msg, Exception e) {
+            super("Error parsing rawdata message manifest. Validate that the message contains a 'manifest.json'. " +
+              "Also, if the manifest is unencrypted, make sure you have configured this with the `non-encrypted-items` setting. Message id=" + msg.ulid(), e);
+        }
     }
 
     public static class NoRawdataMessageItemFoundException extends RuntimeException {

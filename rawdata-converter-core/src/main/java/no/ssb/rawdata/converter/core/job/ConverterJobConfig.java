@@ -382,6 +382,11 @@ public class ConverterJobConfig implements Serializable {
          * Rawdata encryption salt. Required if you specify an encryptionKeyId or encryptionKey
          */
         private byte[] encryptionSalt;
+
+        /**
+         * Name of rawdata message entries that will not be decrypted (treated as non-encrypted data)
+         */
+        private Set<String> nonEncryptedItems;
     }
 
     @ConfigurationProperties("target-storage")

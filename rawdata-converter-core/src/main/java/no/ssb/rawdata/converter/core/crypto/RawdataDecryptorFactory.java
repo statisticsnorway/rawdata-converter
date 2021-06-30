@@ -28,7 +28,8 @@ public class RawdataDecryptorFactory {
         return new RawdataDecryptor(
                 rawdataStructure != null ? rawdataEncryptionKeyOfRawdataStructure(rawdataStructure) : rawdataEncryptionKeyOf(jobConfig.getRawdataSource()),
                 rawdataStructure != null ? rawdataEncryptionSaltOfRawdataStructure(rawdataStructure) : rawdataEncryptionSaltOf(jobConfig.getRawdataSource()),
-                rawdataStructure != null ? rawdataEncryptionAlgorithmOfRawdataStructure(rawdataStructure) : Algorithm.AES128
+                rawdataStructure != null ? rawdataEncryptionAlgorithmOfRawdataStructure(rawdataStructure) : Algorithm.AES128,
+                jobConfig.getRawdataSource().getNonEncryptedItems()
         );
     }
 
