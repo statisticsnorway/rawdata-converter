@@ -224,6 +224,10 @@ public class ConverterJob {
         return jobConfig;
     }
 
+    public PseudoReport getPseudoReport() {
+        return pseudoReportFactory.pseudoReportOf(rawdataConverter.targetAvroSchema(), jobConfig.getPseudoRules());
+    }
+
     public Map<String, Object> getExecutionSummary() {
         Map<String, Object> summary = new TreeMap();
         summary.putAll(ImmutableMap.<String,Object>builder()

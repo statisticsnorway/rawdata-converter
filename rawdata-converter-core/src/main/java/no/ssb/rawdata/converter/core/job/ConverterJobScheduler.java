@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import no.ssb.rawdata.converter.core.convert.RawdataConverterFactory;
 import no.ssb.rawdata.converter.core.crypto.RawdataDecryptorFactory;
+import no.ssb.rawdata.converter.core.pseudo.report.PseudoReportFactory;
 import no.ssb.rawdata.converter.core.rawdatasource.RawdataConsumerFactory;
 import no.ssb.rawdata.converter.core.rawdatasource.RawdataConsumers;
 import no.ssb.rawdata.converter.core.storage.DatasetStorageFactory;
@@ -35,6 +36,7 @@ public class ConverterJobScheduler {
     private final DatasetStorageFactory datasetStorageFactory;
     private final ApplicationEventPublisher eventPublisher;
     private final PrometheusMeterRegistry prometheusMeterRegistry;
+    private final PseudoReportFactory pseudoReportFactory;
 
     public void schedulePartial(ConverterJobConfig partialJobConfig) {
         ConverterJobConfig jobConfig = effectiveConverterJobConfigFactory.effectiveConverterJobConfigOf(partialJobConfig);
@@ -55,6 +57,7 @@ public class ConverterJobScheduler {
               .localStorage(new ConverterJobLocalStorage(jobConfig, eventPublisher)) // TODO: Initialize this internally instead?
               .jobMetrics(new ConverterJobMetrics(prometheusMeterRegistry, jobConfig)) // TODO: Initialize this internally instead?
               .eventPublisher(eventPublisher)
+              .pseudoReportFactory(pseudoReportFactory)
               .build();
 
             jobs.put(job.jobId(), job);

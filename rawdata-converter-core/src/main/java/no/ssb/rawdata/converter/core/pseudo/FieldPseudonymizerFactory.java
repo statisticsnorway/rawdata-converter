@@ -3,6 +3,7 @@ package no.ssb.rawdata.converter.core.pseudo;
 import io.micronaut.context.annotation.Property;
 import lombok.extern.slf4j.Slf4j;
 import no.ssb.dlp.pseudo.core.FieldPseudonymizer;
+import no.ssb.dlp.pseudo.core.PseudoFuncRule;
 import no.ssb.dlp.pseudo.core.PseudoSecret;
 import no.ssb.rawdata.converter.core.exception.RawdataConverterException;
 import no.ssb.rawdata.converter.core.job.ConverterJobConfig;
@@ -37,11 +38,16 @@ public class FieldPseudonymizerFactory {
     }
 
     public FieldPseudonymizer newFieldPseudonymizer(ConverterJobConfig jobConfig) {
+        return newFieldPseudonymizer(jobConfig.getPseudoRules());
+    }
+
+    public FieldPseudonymizer newFieldPseudonymizer(List<PseudoFuncRule> pseudoRules) {
         return new FieldPseudonymizer.Builder()
-          .rules(jobConfig.getPseudoRules())
+          .rules(pseudoRules)
           .secrets(resolvePseudoSecrets((configuredPseudoSecrets)))
           .build();
     }
+
 
     /**
      * <p>Clean up configured pseudo secrets and resolve pseudo secret contents.</p>
